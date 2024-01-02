@@ -1,0 +1,38 @@
+﻿<Window x:Class="DataApp_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DataApp_WPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <StackPanel>
+        <Menu>
+            <MenuItem Header="_Open"></MenuItem>
+            <MenuItem FontFamily="Webdings" Header="&#x0069;"></MenuItem>
+            <MenuItem>
+                <MenuItem.Icon>
+                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_book_add_24_filled.png" />
+                </MenuItem.Icon>
+                <MenuItem.Header>
+                    <TextBlock Text="Eat Me!" VerticalAlignment="Center" ></TextBlock>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        <ListBox Padding="10" x:Name="myListBox">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} - {1}">
+                                <Binding Path="Id" />
+                                <Binding Path="Name" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+    
+</Window>
