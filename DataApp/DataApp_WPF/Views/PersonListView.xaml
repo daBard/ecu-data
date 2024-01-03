@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="DataApp_WPF.Views.PersonListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DataApp_WPF.Views"
+             
+             xmlns:viewmodels="clr-namespace:DataApp_WPF.ViewModels"
+             xmlns:models="clr-namespace:DataApp_WPF.Models"
+             d:DataContext="{d:DesignInstance Type=viewmodels:PersonListViewModel}"
+             
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel>
+            <Button Height="50" Width="200"  Content="Nav To Add Person" Command="{Binding NavigateToAddPersonCommand}"/>    
+        </StackPanel>
+        
+    </Grid>
+</UserControl>

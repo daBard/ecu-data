@@ -5,34 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DataApp_WPF"
         mc:Ignorable="d"
+        
+        xmlns:viewmodels="clr-namespace:DataApp_WPF.ViewModels"
+        xmlns:views="clr-namespace:DataApp_WPF.Views"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
+        
         Title="MainWindow" Height="450" Width="800">
-    <StackPanel>
-        <Menu>
-            <MenuItem Header="_Open"></MenuItem>
-            <MenuItem FontFamily="Webdings" Header="&#x0069;"></MenuItem>
-            <MenuItem>
-                <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_book_add_24_filled.png" />
-                </MenuItem.Icon>
-                <MenuItem.Header>
-                    <TextBlock Text="Eat Me!" VerticalAlignment="Center" ></TextBlock>
-                </MenuItem.Header>
-            </MenuItem>
-        </Menu>
-        <ListBox Padding="10" x:Name="myListBox">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock>
-                        <TextBlock.Text>
-                            <MultiBinding StringFormat="{}{0} - {1}">
-                                <Binding Path="Id" />
-                                <Binding Path="Name" />
-                            </MultiBinding>
-                        </TextBlock.Text>
-                    </TextBlock>
+
+    <Grid>
+        <ContentControl Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate DataType="{x:Type viewmodels:PersonListViewModel}">
+                    <views:PersonListView />
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </StackPanel>
+
+                <DataTemplate DataType="{x:Type viewmodels:AddPersonViewModel}">
+                    <views:AddPersonView />
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:PersonDetailsViewModel}">
+                    <views:PersonDetailsView />
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:UpdatePersonViewModel}">
+                    <views:UpdatePersonView />
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
     
 </Window>

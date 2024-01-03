@@ -9,11 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\ic_fluent_add_circle_24_filled.png" />
     <None Remove="Icons\ic_fluent_book_add_24_filled.png" />
+    <None Remove="Icons\ic_fluent_book_add_24_regular.png" />
+    <None Remove="Icons\test.svg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,12 +26,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Icons\ic_fluent_add_circle_24_filled.png" />
     <Resource Include="Icons\ic_fluent_book_add_24_filled.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Mvvm\Views\" />
-    <Folder Include="Mvvm\ViewModels\" />
+    <Resource Include="Icons\ic_fluent_book_add_24_regular.png" />
+    <Resource Include="Icons\test.svg" />
   </ItemGroup>
 
 </Project>
