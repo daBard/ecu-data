@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
 
 namespace DataApp_WPF.ViewModels;
 
@@ -27,5 +28,11 @@ public partial class MainViewModel : ObservableObject
     public void NavigateToPersonList()
     {
         CurrentViewModel = _serviceProvider!.GetRequiredService<PersonListViewModel>();
+    }
+
+    [RelayCommand]
+    public void Help()
+    {
+        MessageBox.Show("There is no help for you!", "Help is for the weak!", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 }

@@ -45,7 +45,7 @@
                 </MenuItem.Header>
             </MenuItem>
 
-            <MenuItem Header="Help" HorizontalAlignment="Right" />
+            <MenuItem Header="Help" HorizontalAlignment="Right" Command="{Binding HelpCommand}" />
         </Menu>
 
         <ContentControl Grid.Row="1" Margin="20" Content="{Binding CurrentViewModel}">

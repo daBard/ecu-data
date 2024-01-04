@@ -12,7 +12,7 @@ namespace DataApp_WPF.ViewModels;
 public partial class PersonListViewModel : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly PersonService _personRepo;
+    private readonly IPersonService _personRepo;
 
     public PersonListViewModel(IServiceProvider serviceProvider, PersonService personRepo)
     {
