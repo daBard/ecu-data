@@ -12,6 +12,26 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <TextBlock Text="Id" FontSize="12" FontWeight="DemiBold"/>
+            <TextBlock Text="{Binding PersonDetails.Id}" Margin="0,0,0,5"/>
+            <TextBlock Text="Full Name" FontSize="12" FontWeight="DemiBold"/>
+            <TextBlock Text="{Binding PersonDetails.FullName}" Margin="0,0,0,5"/>
+            <TextBlock Text="Age" FontSize="12" FontWeight="DemiBold"/>
+            <TextBlock Text="{Binding PersonDetails.Age}" Margin="0,0,0,5"/>
+            <TextBlock Text="Favourite Food" FontSize="12" FontWeight="DemiBold"/>
+            <TextBlock Text="{Binding PersonDetails.FavouriteFood}"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="50" Width="200"  Content="Update Person" Command="{Binding UpdatePersonBtnCommand}"/>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="50" Width="200" Background="IndianRed" FontWeight="DemiBold" Content="Delete Person" Command="{Binding DeletePersonBtnCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>

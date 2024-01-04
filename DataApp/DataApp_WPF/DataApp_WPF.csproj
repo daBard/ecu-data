@@ -9,10 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Icons\ic_fluent_add_circle_24_filled.png" />
-    <None Remove="Icons\ic_fluent_book_add_24_filled.png" />
-    <None Remove="Icons\ic_fluent_book_add_24_regular.png" />
-    <None Remove="Icons\test.svg" />
+    <None Remove="Icons\ic_fluent_add_circle_24_regular.png" />
+    <None Remove="Icons\ic_fluent_list_24_regular.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,14 +24,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Icons\ic_fluent_add_circle_24_filled.png" />
-    <Resource Include="Icons\ic_fluent_book_add_24_filled.png" />
-    <Resource Include="Icons\ic_fluent_book_add_24_regular.png" />
-    <Resource Include="Icons\test.svg" />
+    <Folder Include="Repos\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repos\" />
+    <Resource Include="Icons\ic_fluent_add_circle_24_regular.png" />
+    <Resource Include="Icons\ic_fluent_list_24_regular.png" />
   </ItemGroup>
 
 </Project>

@@ -47,7 +47,7 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,5">
-                    <Label Content="FavouriteFood"></Label>
+                    <Label Content="Favourite Food"></Label>
                     <TextBox MinWidth="200" Text="{Binding PersonForm.FavouriteFood}"></TextBox>
                 </StackPanel>
             </Grid>

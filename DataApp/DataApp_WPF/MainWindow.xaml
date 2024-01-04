@@ -25,23 +25,23 @@
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
 
-            <MenuItem Margin="5,0" Command="{Binding NavigateToAddPersonCommand}">
+            <MenuItem Margin="5,0" Command="{Binding NavigateToPersonListCommand}">
                 <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_add_circle_24_filled.png" />
+                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_list_24_regular.png" />
                 </MenuItem.Icon>
                 <MenuItem.Header>
-                    <TextBlock Text="Add New Person" VerticalAlignment="Center" />
+                    <TextBlock Text="See List" VerticalAlignment="Center" />
                 </MenuItem.Header>
             </MenuItem>
 
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-            <MenuItem Margin="5,0" Command="{Binding NavigateToPersonListCommand}">
+            <MenuItem Margin="5,0" Command="{Binding NavigateToAddPersonCommand}">
                 <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_add_circle_24_filled.png" />
+                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_add_circle_24_regular.png" />
                 </MenuItem.Icon>
                 <MenuItem.Header>
-                    <TextBlock Text="See List" VerticalAlignment="Center" />
+                    <TextBlock Text="Add New Person" VerticalAlignment="Center" />
                 </MenuItem.Header>
             </MenuItem>
 
