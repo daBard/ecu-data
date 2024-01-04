@@ -1,32 +1,28 @@
 ﻿using DataApp_WPF.Interfaces;
 using DataApp_WPF.Models;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
-namespace DataApp_WPF.Services;
-
-internal class PersonService : IPersonService
+namespace DataApp_WPF.Services
 {
-    public bool AddPerson()
+    public class PersonService : IPersonService
     {
-        throw new NotImplementedException();
-    }
+        private ObservableCollection<Person> personList = [];
 
-    public bool DeletePerson()
-    {
-        throw new NotImplementedException();
-    }
+        public bool AddPersonToList(Person person)
+        {
+            try
+            {
+                personList.Add(person);
+                return true;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex); }
+            return false;
+        }
 
-    public Person GetPersonDetails(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public IEnumerable<Person> GetPersonList()
-    {
-        throw new NotImplementedException();
-    }
-
-    public bool UpdatePerson()
-    {
-        throw new NotImplementedException();
+        public ObservableCollection<Person> GetPersonList() 
+        { 
+            return personList;
+        }
     }
 }

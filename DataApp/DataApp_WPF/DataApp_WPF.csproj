@@ -32,4 +32,8 @@
     <Resource Include="Icons\test.svg" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repos\" />
+  </ItemGroup>
+
 </Project>

@@ -13,7 +13,21 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
-            <Button Height="50" Width="200"  Content="Nav To Add Person" Command="{Binding NavigateToAddPersonCommand}"/>    
+            <ListView Grid.Row="1" Padding="10" x:Name="PersonListViewElement" ItemsSource="{Binding People}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+
+                        <TextBlock Padding="0,5" Text="{Binding FullName}">
+                            <TextBlock.InputBindings>
+                                <MouseBinding Command="{Binding DataContext.ShowPersonDetailsCommand, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+                                              CommandParameter="{Binding Id}"
+                                              Gesture="LeftClick" />
+                            </TextBlock.InputBindings>
+                        </TextBlock>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>    
         </StackPanel>
         
     </Grid>

@@ -12,8 +12,52 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel>
-            <Button HorizontalAlignment="Left" Height="50" Width="200"  Content="Nav to List" Command="{Binding NavigateToPersonListCommand}"/>
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                
+                <StackPanel Grid.Column="0" Grid.Row="0" Margin="10,5">
+                    <Label Content="First Name"></Label>
+                    <TextBox MinWidth="200" Text="{Binding PersonForm.FirstName}"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="0" Margin="10,5">
+                    <Label Content="Last Name"></Label>
+                    <TextBox MinWidth="200" Text="{Binding PersonForm.LastName}"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="0" Grid.Row="1" Margin="10,5">
+                    <Label Content="Age"></Label>
+                    <TextBox MinWidth="200" Text="{Binding PersonForm.Age}"></TextBox>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="1" Margin="10,5">
+                    <Label Content="FavouriteFood"></Label>
+                    <TextBox MinWidth="200" Text="{Binding PersonForm.FavouriteFood}"></TextBox>
+                </StackPanel>
+            </Grid>
+
+            
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="50" Width="200"  Content="Add Person" Command="{Binding AddPersonBtnCommand}"/>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="50" Width="200"  Content="Cancel" Command="{Binding CancelBtnCommand}"/>
+        </Grid>
     </Grid>
 </UserControl>

@@ -1,13 +1,12 @@
 ﻿using DataApp_WPF.Models;
+using System.Collections.ObjectModel;
 
 namespace DataApp_WPF.Interfaces
 {
-    internal interface IPersonService
+    public interface IPersonService
     {
-        bool AddPerson();
-        bool DeletePerson();
-        bool UpdatePerson();
-        IEnumerable<Person> GetPersonList();
-        Person GetPersonDetails(Guid id);
+        bool AddPersonToList(Person person);
+
+        ObservableCollection<Person> GetPersonList();
     }
 }
