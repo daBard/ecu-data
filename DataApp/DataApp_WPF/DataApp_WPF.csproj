@@ -11,6 +11,9 @@
   <ItemGroup>
     <None Remove="Icons\ic_fluent_add_circle_24_regular.png" />
     <None Remove="Icons\ic_fluent_list_24_regular.png" />
+    <None Remove="Icons\list.ico" />
+    <None Remove="Icons\plus.ico" />
+    <None Remove="Icons\WindowIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,6 +33,9 @@
   <ItemGroup>
     <Resource Include="Icons\ic_fluent_add_circle_24_regular.png" />
     <Resource Include="Icons\ic_fluent_list_24_regular.png" />
+    <Resource Include="Icons\list.ico" />
+    <Resource Include="Icons\plus.ico" />
+    <Resource Include="Icons\WindowIcon.ico" />
   </ItemGroup>
 
 </Project>

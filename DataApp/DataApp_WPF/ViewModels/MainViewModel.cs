@@ -33,6 +33,6 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     public void Help()
     {
-        MessageBox.Show("There is no help for you!", "Help is for the weak!", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show("There is no help for you!\n\nOh, and the icons comes from https://fluenticons.co/", "Help is for the weak!", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 }

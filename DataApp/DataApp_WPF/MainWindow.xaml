@@ -10,7 +10,8 @@
         xmlns:views="clr-namespace:DataApp_WPF.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         
-        Title="MainWindow" Height="450" Width="800">
+        Title="Personlista" Height="450" Width="800" MinHeight="300" MinWidth="500"
+        Icon="/DataApp_WPF;component/Icons/WindowIcon.ico">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -27,7 +28,7 @@
 
             <MenuItem Margin="5,0" Command="{Binding NavigateToPersonListCommand}">
                 <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_list_24_regular.png" />
+                    <Image Source="/DataApp_WPF;component/Icons/list.ico" />
                 </MenuItem.Icon>
                 <MenuItem.Header>
                     <TextBlock Text="See List" VerticalAlignment="Center" />
@@ -38,7 +39,7 @@
 
             <MenuItem Margin="5,0" Command="{Binding NavigateToAddPersonCommand}">
                 <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/ic_fluent_add_circle_24_regular.png" />
+                    <Image Source="/DataApp_WPF;component/Icons/plus.ico" />
                 </MenuItem.Icon>
                 <MenuItem.Header>
                     <TextBlock Text="Add New Person" VerticalAlignment="Center" />
