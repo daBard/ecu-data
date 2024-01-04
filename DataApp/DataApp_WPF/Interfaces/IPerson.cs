@@ -6,7 +6,7 @@
         string FirstName { get; set; }
         string LastName { get; set; }
         string FullName { get; }
-        int Age { get; set; }
+        int? Age { get; set; }
         string FavouriteFood { get; set; }
     }
 }

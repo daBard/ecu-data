@@ -11,6 +11,6 @@ public class Person() : IPerson
     {
         get { return $"{FirstName} {LastName}"; }
     }
-    public int Age { get; set; } = 0;
+    public int? Age { get; set; } = null;
     public string FavouriteFood { get; set; } = null!;
 }

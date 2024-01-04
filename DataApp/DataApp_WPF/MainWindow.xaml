@@ -10,7 +10,7 @@
         xmlns:views="clr-namespace:DataApp_WPF.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         
-        Title="Personlista" Height="450" Width="800" MinHeight="300" MinWidth="500"
+        Title="Person List" Height="450" Width="800" MinHeight="300" MinWidth="500"
         Icon="/DataApp_WPF;component/Icons/WindowIcon.ico">
 
     <Grid>
@@ -31,7 +31,7 @@
                     <Image Source="/DataApp_WPF;component/Icons/list.ico" />
                 </MenuItem.Icon>
                 <MenuItem.Header>
-                    <TextBlock Text="See List" VerticalAlignment="Center" />
+                    <TextBlock Text="View List" VerticalAlignment="Center" />
                 </MenuItem.Header>
             </MenuItem>
 
