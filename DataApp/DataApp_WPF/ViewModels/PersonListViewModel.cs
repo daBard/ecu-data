@@ -13,10 +13,10 @@ public partial class PersonListViewModel : ObservableObject
     private readonly IServiceProvider _serviceProvider;
     private readonly PersonService _personService;
 
-    public PersonListViewModel(IServiceProvider serviceProvider, PersonService personRepo)
+    public PersonListViewModel(IServiceProvider serviceProvider, PersonService personService)
     {
         _serviceProvider = serviceProvider;
-        _personService = personRepo;
+        _personService = personService;
         People = _personService.GetPersonList();
     }
 

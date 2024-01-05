@@ -12,7 +12,6 @@ public partial class UpdatePersonViewModel : ObservableObject
 
     private readonly IServiceProvider _serviceProvider;
     private readonly PersonService _personService;
-    private readonly Person _currentPerson = new();
 
     public UpdatePersonViewModel(IServiceProvider serviceProvider, PersonService personService)
     {

@@ -17,7 +17,7 @@ namespace DataApp_WPF.Services
                 _personList.Add(person);
                 return true;
             }
-            catch (Exception ex) { Debug.WriteLine(ex); }
+            catch(Exception ex) { Debug.WriteLine(ex); }
             return false;
         }
 
@@ -25,11 +25,12 @@ namespace DataApp_WPF.Services
         {
             return true;
         }
+
         public bool DeletePersonFromList()
         {
             try
             {
-                Person person = _personList.Single(x => x.Id == _storedId);
+                Person person = _personList.Single(x => x.Id == _storedId)!;
                 _personList.Remove(person);
                 return true;
             }
@@ -47,7 +48,7 @@ namespace DataApp_WPF.Services
             return null!;
         }
 
-        public ObservableCollection<Person> GetPersonList() 
+        public ObservableCollection<Person> GetPersonList()
         { 
             return _personList;
         }
@@ -59,7 +60,7 @@ namespace DataApp_WPF.Services
 
         public Guid GetStoredId()
         { 
-            return _storedId; 
+            return _storedId;
         }
     }
 }
