@@ -38,4 +38,9 @@
     <Resource Include="Icons\WindowIcon.ico" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+    <Folder Include="Models\Entities\" />
+  </ItemGroup>
+
 </Project>
