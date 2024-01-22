@@ -3,16 +3,25 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
+using Business.Services;
+using Helper;
+
 namespace DataApp_WPF.ViewModels;
 
 public partial class MainViewModel : ObservableObject
 {
     private readonly IServiceProvider? _serviceProvider;
+    private readonly ErrorLogger? _errorLogger;
 
-    public MainViewModel(IServiceProvider serviceProvider)
+    private readonly TestService _testService = new TestService();
+
+    public MainViewModel(IServiceProvider serviceProvider, ErrorLogger errorLogger)
     {
         _serviceProvider = serviceProvider;
-        CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();
+        _errorLogger = errorLogger;
+        //CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();
+
+        errorLogger.Logger("Test method", "Test message");
     }
 
     [ObservableProperty]

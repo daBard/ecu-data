@@ -1,11 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 
-using DataApp_WPF.Interfaces;
-using DataApp_WPF.Models;
-using DataApp_WPF.Repositories;
+using Business.Interfaces;
+using Business.DTOs;
 
-namespace DataApp_WPF.Services;
+namespace Business.Services;
 
 public class PersonService : IPersonService
 {

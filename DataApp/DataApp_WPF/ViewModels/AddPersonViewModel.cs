@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 
 using DataApp_WPF.Models;
-using DataApp_WPF.Services;
+using Business.Services;
 using System.Windows;
 
 namespace DataApp_WPF.ViewModels;
@@ -21,7 +21,7 @@ public partial class AddPersonViewModel(IServiceProvider serviceProvider, Person
     {
         if (!string.IsNullOrWhiteSpace(PersonForm.FirstName) && !string.IsNullOrWhiteSpace(PersonForm.LastName) && !string.IsNullOrWhiteSpace(PersonForm.FavouriteFood))
         {
-            _personService.AddPersonToList(PersonForm);
+            //_personService.AddPersonToList(PersonForm);
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();

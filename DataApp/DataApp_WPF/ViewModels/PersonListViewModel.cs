@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 
 using DataApp_WPF.Models;
-using DataApp_WPF.Services;
+using Business.Services;
 
 namespace DataApp_WPF.ViewModels;
 
@@ -17,7 +17,7 @@ public partial class PersonListViewModel : ObservableObject
     {
         _serviceProvider = serviceProvider;
         _personService = personService;
-        People = _personService.GetPersonList();
+        //People = _personService.GetPersonList();
     }
 
     [ObservableProperty]

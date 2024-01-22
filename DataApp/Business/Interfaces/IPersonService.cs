@@ -1,7 +1,7 @@
-﻿using DataApp_WPF.Models;
+﻿using Business.DTOs;
 using System.Collections.ObjectModel;
 
-namespace DataApp_WPF.Interfaces
+namespace Business.Interfaces
 {
     public interface IPersonService
     {

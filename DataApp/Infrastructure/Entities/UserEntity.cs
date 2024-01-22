@@ -24,8 +24,18 @@ public class UserEntity
     [Column(TypeName = "nvarchar(200)")]
     public string Password { get; set; } = null!;
 
+    [Required]
+    [ForeignKey(nameof(UserProfile))]
+    public int RoleId { get; set; }
+
+    [Required]
+    [ForeignKey(nameof(Address))]
+    public int AddressId { get; set; }
+
     public virtual UserProfileEntity UserProfile { get; set; } = null!;
 
-    public ICollection<UserRoleEntity> UserRoles { get; set; } = new HashSet<UserRoleEntity>();
+    public virtual AddressEntity Address { get; set; } = null!;
+
+    public virtual ICollection<UserRoleEntity> UserRoles { get; set; } = new HashSet<UserRoleEntity>();
 
 }

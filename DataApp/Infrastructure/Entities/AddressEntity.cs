@@ -11,7 +11,7 @@ public class AddressEntity
     [Column(TypeName = "nvarchar(150)")]
     public string? Street { get; set; }
 
-    [Column(TypeName = "int(5)")]
+    [Column(TypeName = "varchar(5)")]
     public int PostalCode { get; set; }
 
     [Column(TypeName = "nvarchar(100)")]

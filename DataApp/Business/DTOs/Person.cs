@@ -1,8 +1,6 @@
-﻿using DataApp_WPF.Interfaces;
+﻿namespace Business.DTOs;
 
-namespace DataApp_WPF.Models;
-
-public class Person() : IPerson
+public class Person()
 {
     public Guid Id { get; } = Guid.NewGuid();
     public string FirstName { get; set; } = null!;

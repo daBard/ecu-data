@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 
 using DataApp_WPF.Models;
-using DataApp_WPF.Services;
+using Business.Services;
 
 namespace DataApp_WPF.ViewModels;
 
@@ -17,7 +17,7 @@ public partial class UpdatePersonViewModel : ObservableObject
     {
         _serviceProvider = serviceProvider;
         _personService = personService;
-        PersonForm = _personService.GetPerson();
+        //PersonForm = _personService.GetPerson();
     }
 
     [ObservableProperty]

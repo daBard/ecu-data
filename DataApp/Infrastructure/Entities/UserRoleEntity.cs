@@ -1,12 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Entities
 {
+    [PrimaryKey(nameof(UserId), nameof(RoleId))]
     public class UserRoleEntity
     {
-        [Key]
         public int UserId { get; set; }
-        [Key]
         public int RoleId { get; set; }
 
         public virtual UserEntity User { get; set; } = null!;

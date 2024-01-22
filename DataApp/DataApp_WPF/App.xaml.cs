@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DataApp_WPF.ViewModels;
 using DataApp_WPF.Views;
 using Infrastructure.Contexts;
+using Helper;
 
 
 
@@ -25,20 +26,24 @@ public partial class App : Application
             {
                 services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_localConnectionString));
 
-                services.AddTransient<PersonListViewModel>();
-                services.AddTransient<AddPersonViewModel>();
-                services.AddTransient<PersonDetailsViewModel>();
-                services.AddTransient<UpdatePersonViewModel>();
+                services.AddSingleton<ErrorLogger>();
 
-                services.AddTransient<PersonListView>();
-                services.AddTransient<AddPersonView>();
-                services.AddTransient<PersonDetailsView>();
-                services.AddTransient<UpdatePersonView>();
+                //services.AddTransient<PersonListViewModel>();
+                //services.AddTransient<AddPersonViewModel>();
+                //services.AddTransient<PersonDetailsViewModel>();
+                //services.AddTransient<UpdatePersonViewModel>();
+
+                //services.AddTransient<PersonListView>();
+                //services.AddTransient<AddPersonView>();
+                //services.AddTransient<PersonDetailsView>();
+                //services.AddTransient<UpdatePersonView>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();
             })
             .Build();
+
+        
     }
 
     protected override void OnStartup(StartupEventArgs e)
