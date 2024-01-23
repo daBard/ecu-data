@@ -11,17 +11,18 @@ namespace DataApp_WPF.ViewModels;
 public partial class MainViewModel : ObservableObject
 {
     private readonly IServiceProvider? _serviceProvider;
-    private readonly ErrorLogger? _errorLogger;
 
-    private readonly TestService _testService = new TestService();
+    private readonly UserService _userService;
 
-    public MainViewModel(IServiceProvider serviceProvider, ErrorLogger errorLogger)
+    public MainViewModel(IServiceProvider serviceProvider, UserService userService)
     {
         _serviceProvider = serviceProvider;
-        _errorLogger = errorLogger;
         //CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();
 
-        errorLogger.Logger("Test method", "Test message");
+        _userService = userService;
+
+        _userService.CreateUser();
+
     }
 
     [ObservableProperty]

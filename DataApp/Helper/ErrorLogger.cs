@@ -12,7 +12,9 @@ public class ErrorLogger
         {
             using (var sw = new StreamWriter(_filePath, true))
             {
-                sw.WriteLine($"{methodName} - {message}");
+                
+                string now = DateTime.Now.ToString();
+                sw.WriteLine($"{now} | {methodName} | {message}");
             }
         }
         catch (Exception ex)

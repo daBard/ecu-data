@@ -7,6 +7,7 @@ using DataApp_WPF.ViewModels;
 using DataApp_WPF.Views;
 using Infrastructure.Contexts;
 using Helper;
+using Business.Services;
 
 
 
@@ -16,8 +17,13 @@ public partial class App : Application
 {
     private static IHost? _builder;
 
-    private readonly string _localConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bardj\Documents\GitHub\ecu-data\DataApp\Infrastructure\Data\User_LocalDb.mdf;Integrated Security=True;Connect Timeout=30";
-    private readonly string _mariaConnectionString = "";
+    //HOME COMPUTER
+    //private readonly string _localConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bardj\Documents\GitHub\ecu-data\DataApp\Infrastructure\Data\User_LocalDb.mdf;Integrated Security=True;Connect Timeout=30";
+    
+    //WORK LAPTOP
+    private readonly string _localConnectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\jnbd05\Documents\Barden-GitHub\ECU\data\DataApp\Infrastructure\Data\User_LocalDb.mdf;Integrated Security=True;Connect Timeout=30";
+    
+    //private readonly string _mariaConnectionString = "";
 
     public App()
     {
@@ -27,6 +33,7 @@ public partial class App : Application
                 services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_localConnectionString));
 
                 services.AddSingleton<ErrorLogger>();
+                services.AddSingleton<UserService>();
 
                 //services.AddTransient<PersonListViewModel>();
                 //services.AddTransient<AddPersonViewModel>();

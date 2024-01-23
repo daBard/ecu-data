@@ -1,7 +1,119 @@
-﻿namespace Infrastructure.Repositories
-{
-    public abstract class Repository
-    {
+﻿using Helper;
+using Infrastructure.Contexts;
+using System.Linq.Expressions;
 
+namespace Infrastructure.Repositories;
+
+public abstract class Repository<TEntity> where TEntity : class
+{
+    private readonly LocalDataContext _context;
+
+    protected Repository(LocalDataContext context)
+    {
+        _context = context;
+    }
+
+    /// <summary>
+    /// Create a new row in db table
+    /// </summary>
+    /// <param name="entity">Flexible param based on topical entity</param>
+    /// <returns>Created entity if successful, else null</returns>
+    public virtual TEntity Create(TEntity entity)
+    {
+        try
+        {
+            _context.Set<TEntity>().Add(entity);
+            _context.SaveChanges();
+            return entity;
+        }
+        catch(Exception ex) { LogError(ex.Message); }
+        return null!;
+    }
+
+    /// <summary>
+    /// Get all rows from db table
+    /// </summary>
+    /// <returns>IEnumerable of topical entity if successful, else null</returns>
+    public virtual IEnumerable<TEntity> GetAll()
+    {
+        try
+        {
+            var result = _context.Set<TEntity>().ToList();
+            return result;
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return null!;
+    }
+
+    /// <summary>
+    /// Get one row from db table
+    /// </summary>
+    /// <param name="predicate">One unique param from topical entity</param>
+    /// <returns>One topical entity if successful, else null</returns>
+    public virtual TEntity GetOne(Expression<Func<TEntity, bool>> predicate) 
+    {
+        try
+        {
+            var result = _context.Set<TEntity>().FirstOrDefault(predicate, null!);
+            return result;
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return null!;
+    }
+
+    /// <summary>
+    /// Update one row in db table
+    /// </summary>
+    /// <param name="entity">One entity of topical entity</param>
+    /// <returns>Updated entity if successful, else null</returns>
+    public virtual TEntity Update(TEntity entity)
+    {
+        try
+        {
+            var entityToUpdate = _context.Set<TEntity>().Find(entity);
+            if (entityToUpdate != null)
+            {
+                entityToUpdate = entity;
+                _context.Set<TEntity>().Update(entityToUpdate);
+                _context.SaveChanges();
+
+                return entityToUpdate;
+            }
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return null!;
+    }
+
+    /// <summary>
+    /// Delete one row in db table
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <returns>True if entity is successfully removed, else false</returns>
+    public virtual bool Delete(Expression<Func<TEntity, bool>> predicate)
+    {
+        try
+        {
+            var entity = _context.Set<TEntity>().FirstOrDefault(predicate);
+            if (entity != null)
+            {
+                _context.Set<TEntity>().Remove(entity);
+                _context.SaveChanges();
+            }
+            return true;
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return false;
+    }
+
+
+    /// <summary>
+    /// Sends classname and error message to ErrorLogger in Helper
+    /// </summary>
+    /// <param name="errorMessage">String value for logging of error</param>
+    private void LogError(string errorMessage)
+    {
+        string className = this.ToString() ?? "Unknown class";
+        ErrorLogger errorLogger = new ErrorLogger();
+        errorLogger.Logger(className, errorMessage);
     }
 }
