@@ -12,7 +12,7 @@ public class AddressEntity
     public string? Street { get; set; }
 
     [Column(TypeName = "varchar(5)")]
-    public int PostalCode { get; set; }
+    public string? PostalCode { get; set; }
 
     [Column(TypeName = "nvarchar(100)")]
     public string? City { get; set; }

@@ -26,7 +26,7 @@ public abstract class Repository<TEntity> where TEntity : class
             _context.SaveChanges();
             return entity;
         }
-        catch(Exception ex) { LogError(ex.Message); }
+        catch(Exception ex) { LogError(ex.ToString()); }
         return null!;
     }
 

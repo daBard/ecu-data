@@ -1,6 +1,5 @@
 ﻿using Business.DTOs;
 using Helper;
-using Infrastructure.Contexts;
 using Infrastructure.Entities;
 using Infrastructure.Repositories;
 
@@ -9,14 +8,12 @@ namespace Business.Services;
 public class UserService
 {
     private readonly ErrorLogger _errorLogger;
-    private readonly LocalDataContext _context;
     private readonly UserRepo _userRepo;
 
-    public UserService(ErrorLogger errorLogger, LocalDataContext context)
+    public UserService(ErrorLogger errorLogger, UserRepo userRepo)
     {
         _errorLogger = errorLogger;
-        _context = context;
-        _userRepo = new UserRepo(context);
+        _userRepo = userRepo;
     }
 
     public bool CreateUser()
@@ -34,9 +31,25 @@ public class UserService
             //userEntity.Password = newUser.Password; //HASH PASSWORD
             //userEntity.Email = newUser.Email;
 
-            userEntity.RegistrationDate = DateTime.Now;
-            userEntity.AddressId = 0; //TEMP
-            userEntity.RoleId = 0; //TEMP  
+            userEntity.RegistrationDate = DateTime.Now; 
+
+            AddressEntity addressEntity = new AddressEntity();
+            //addressEntity.Id = 1;
+            addressEntity.Street = "Gata";
+            addressEntity.PostalCode = "12345";
+            addressEntity.City = "By";
+
+            UserProfileEntity userProfileEntity = new UserProfileEntity();
+            //userProfileEntity.Id = 1;
+            userProfileEntity.FirstName = "Test";
+            userProfileEntity.LastName = "Testson";
+            userProfileEntity.Birthdate = DateTime.Now;
+
+            //userEntity.AddressId = 1; //TEMP
+            userEntity.Address = addressEntity;
+            //userEntity.RoleId = 1; //TEMP
+            userEntity.UserProfile = userProfileEntity;
+
 
             _userRepo.Create(userEntity);
             

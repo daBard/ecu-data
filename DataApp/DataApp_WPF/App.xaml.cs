@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DataApp_WPF.ViewModels;
 using DataApp_WPF.Views;
 using Infrastructure.Contexts;
+using Infrastructure.Repositories;
 using Helper;
 using Business.Services;
 
@@ -34,6 +35,7 @@ public partial class App : Application
 
                 services.AddSingleton<ErrorLogger>();
                 services.AddSingleton<UserService>();
+                services.AddSingleton<UserRepo>();
 
                 //services.AddTransient<PersonListViewModel>();
                 //services.AddTransient<AddPersonViewModel>();
