@@ -17,7 +17,7 @@ public partial class MainViewModel : ObservableObject
     public MainViewModel(IServiceProvider serviceProvider, UserService userService)
     {
         _serviceProvider = serviceProvider;
-        //CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();
+        CurrentViewModel = _serviceProvider.GetRequiredService<UserListViewModel>();
 
         _userService = userService;
 
@@ -29,20 +29,22 @@ public partial class MainViewModel : ObservableObject
     private ObservableObject? _currentViewModel;
 
     [RelayCommand]
-    private void NavigateToAddPerson()
+    private void NavigateToAddUser()
     {
         CurrentViewModel = _serviceProvider!.GetRequiredService<AddPersonViewModel>();
     }
 
     [RelayCommand]
-    public void NavigateToPersonList()
+    public void NavigateToUserList()
     {
-        CurrentViewModel = _serviceProvider!.GetRequiredService<PersonListViewModel>();
+        CurrentViewModel = _serviceProvider!.GetRequiredService<UserListViewModel>();
     }
 
     [RelayCommand]
     public static void Help()
     {
-        MessageBox.Show("There is no help for you!\n\nOh, and the icons come from https://fluenticons.co/", "Help is for the weak!", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show("\"Many things can be a waste of your effort, but a helping hand is not.\"\n\n" +
+            "Now you are inspired... GET BACK TO CODING!\n\n" +
+            "Oh, and the icons come from https://fluenticons.co/", "In many forms, help can come...", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 }

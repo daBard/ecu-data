@@ -51,8 +51,8 @@
 
         <ContentControl Grid.Row="1" Margin="20" Content="{Binding CurrentViewModel}">
             <ContentControl.Resources>
-                <DataTemplate DataType="{x:Type viewmodels:PersonListViewModel}">
-                    <views:PersonListView />
+                <DataTemplate DataType="{x:Type viewmodels:UserListViewModel}">
+                    <views:UserListView />
                 </DataTemplate>
 
                 <DataTemplate DataType="{x:Type viewmodels:AddPersonViewModel}">

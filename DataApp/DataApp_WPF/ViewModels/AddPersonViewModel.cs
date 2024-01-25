@@ -8,23 +8,23 @@ using System.Windows;
 
 namespace DataApp_WPF.ViewModels;
 
-public partial class AddPersonViewModel(IServiceProvider serviceProvider, PersonService personService) : ObservableObject
+public partial class AddPersonViewModel(IServiceProvider serviceProvider, UserService userService) : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
-    private readonly PersonService _personService = personService;
+    private readonly UserService _userService = userService;
 
     [ObservableProperty]
-    private Person personForm = new();
+    private ListUser personForm = new();
 
     [RelayCommand]
     public void AddPersonBtn()
     {
-        if (!string.IsNullOrWhiteSpace(PersonForm.FirstName) && !string.IsNullOrWhiteSpace(PersonForm.LastName) && !string.IsNullOrWhiteSpace(PersonForm.FavouriteFood))
+        if (!string.IsNullOrWhiteSpace(PersonForm.UserName) && !string.IsNullOrWhiteSpace(PersonForm.Email))
         {
             //_personService.AddPersonToList(PersonForm);
 
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();
+            mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UserListViewModel>();
         }
         else
         {
@@ -36,6 +36,6 @@ public partial class AddPersonViewModel(IServiceProvider serviceProvider, Person
     public void CancelBtn()
     {
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<PersonListViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UserListViewModel>();
     }
 }

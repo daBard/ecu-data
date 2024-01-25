@@ -50,13 +50,25 @@ public class UserService
             //userEntity.RoleId = 1; //TEMP
             userEntity.UserProfile = userProfileEntity;
 
-
             _userRepo.Create(userEntity);
             
             return true;
         }
         catch (Exception ex) { LogError(ex.Message); }
         return false;
+    }
+
+    public IEnumerable<ListUserDTO> GetUserList()
+    {
+        IEnumerable<ListUserDTO> listUsers= new List<ListUserDTO>();
+        IEnumerable<UserEntity> repoUsers = _userRepo.GetAll();
+
+        foreach (var repoUser in repoUsers)
+        {
+            
+        }
+
+        return null!;
     }
 
     public bool DeleteUser()
