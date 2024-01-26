@@ -37,19 +37,21 @@ public partial class App : Application
             {
                 services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_connectionStrings.Home));
 
-                services.AddSingleton<ErrorLogger>();
-                services.AddSingleton<UserService>();
-                services.AddSingleton<UserRepo>();
+                services.AddScoped<ErrorLogger>();
+                services.AddScoped<UserService>();
+                services.AddScoped<UserRepo>();
+                services.AddScoped<AddressRepo>();
+                services.AddScoped<UserProfileRepo>();
 
                 services.AddTransient<UserListViewModel>();
-                //services.AddTransient<AddPersonViewModel>();
-                //services.AddTransient<PersonDetailsViewModel>();
-                //services.AddTransient<UpdatePersonViewModel>();
+                services.AddTransient<UserAddViewModel>();
+                services.AddTransient<UserDetailsViewModel>();
+                services.AddTransient<UserUpdateViewModel>();
 
                 services.AddTransient<UserListView>();
-                //services.AddTransient<AddPersonView>();
-                //services.AddTransient<PersonDetailsView>();
-                //services.AddTransient<UpdatePersonView>();
+                services.AddTransient<UserAddView>();
+                services.AddTransient<UserDetailsView>();
+                services.AddTransient<UserUpdateView>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();

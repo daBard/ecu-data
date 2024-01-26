@@ -34,7 +34,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PostalCode")
-                        .IsRequired()
                         .HasColumnType("varchar(5)");
 
                     b.Property<string>("Street")
@@ -85,12 +84,12 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("date");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("UserProfileId")
+                        .HasColumnType("int");
 
                     b.HasKey("Guid");
 
@@ -100,7 +99,7 @@ namespace Infrastructure.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("RoleId")
+                    b.HasIndex("UserProfileId")
                         .IsUnique();
 
                     b.ToTable("Users");
@@ -162,7 +161,7 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Infrastructure.Entities.UserProfileEntity", "UserProfile")
                         .WithOne("User")
-                        .HasForeignKey("Infrastructure.Entities.UserEntity", "RoleId")
+                        .HasForeignKey("Infrastructure.Entities.UserEntity", "UserProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

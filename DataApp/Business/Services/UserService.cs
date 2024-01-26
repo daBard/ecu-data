@@ -9,71 +9,142 @@ public class UserService
 {
     private readonly ErrorLogger _errorLogger;
     private readonly UserRepo _userRepo;
+    private readonly AddressRepo _addressRepo;
+    private readonly UserProfileRepo _userProfileRepo;
 
-    public UserService(ErrorLogger errorLogger, UserRepo userRepo)
+    private Guid _userId;
+    private UserDetailsDTO? _userDetailsDTO;
+
+    public UserService(ErrorLogger errorLogger, UserRepo userRepo, AddressRepo addressRepo, UserProfileRepo userProfileRepo)
     {
         _errorLogger = errorLogger;
         _userRepo = userRepo;
+        _addressRepo = addressRepo;
+        _userProfileRepo = userProfileRepo;
     }
 
-    public bool CreateUser()
+    public bool CreateUser(UserAddDTO newUser)
     {
         try
         {
             UserEntity userEntity = new UserEntity();
 
-            userEntity.Guid = Guid.NewGuid();
-            userEntity.UserName = "JOCHEN";
-            userEntity.Password = "BYTMIG123!";
-            userEntity.Email = "jochen@example.com";
-
-            //userEntity.UserName = newUser.UserName;
-            //userEntity.Password = newUser.Password; //HASH PASSWORD
-            //userEntity.Email = newUser.Email;
+            userEntity.Guid = newUser.Id;
+            userEntity.UserName = newUser.UserName;
+            userEntity.Password = newUser.Password; //HASH PASSWORD
+            userEntity.Email = newUser.Email;
 
             userEntity.RegistrationDate = DateTime.Now; 
 
             AddressEntity addressEntity = new AddressEntity();
-            //addressEntity.Id = 1;
-            addressEntity.Street = "Gata";
-            addressEntity.PostalCode = "12345";
-            addressEntity.City = "By";
 
             UserProfileEntity userProfileEntity = new UserProfileEntity();
-            //userProfileEntity.Id = 1;
-            userProfileEntity.FirstName = "Test";
-            userProfileEntity.LastName = "Testson";
+            userProfileEntity.FirstName = newUser.FirstName;
+            userProfileEntity.LastName = newUser.LastName;
             userProfileEntity.Birthdate = DateTime.Now;
 
-            //userEntity.AddressId = 1; //TEMP
             userEntity.Address = addressEntity;
-            //userEntity.RoleId = 1; //TEMP
             userEntity.UserProfile = userProfileEntity;
 
-            _userRepo.Create(userEntity);
-            
-            return true;
+            if (_userRepo.Create(userEntity) != null)
+            {
+                return true;
+            }
         }
         catch (Exception ex) { LogError(ex.Message); }
         return false;
     }
 
-    public IEnumerable<ListUserDTO> GetUserList()
+    public IEnumerable<UserListDTO> GetUserList()
     {
-        IEnumerable<ListUserDTO> listUsers= new List<ListUserDTO>();
-        IEnumerable<UserEntity> repoUsers = _userRepo.GetAll();
+        List<UserListDTO> listUserDTOs= new List<UserListDTO>();
+
+        var repoUsers = _userRepo.GetAll();
 
         foreach (var repoUser in repoUsers)
         {
-            
+            UserListDTO listUserDTO = new UserListDTO();
+            listUserDTO.Id = repoUser.Guid;
+            listUserDTO.UserName = repoUser.UserName;
+            listUserDTO.Email = repoUser.Email;
+            listUserDTOs.Add(listUserDTO);
         }
 
+        return listUserDTOs;
+    }
+
+    public UserDetailsDTO GetUserDetails(Guid userDetailsId)
+    {
+        var userEntity = _userRepo.GetOne(x => (x.Guid == userDetailsId));
+        if (userEntity != null)
+        {
+            var userProfileEntity = _userProfileRepo.GetOne(x => x.Id == userEntity.UserProfileId);
+            var userAddressEntity = _addressRepo.GetOne(x => x.Id == userEntity.AddressId);
+
+            UserDetailsDTO userDetailsDTO = new UserDetailsDTO()
+            {
+                FirstName = userProfileEntity.FirstName,
+                LastName = userProfileEntity.LastName,
+                UserName = userEntity.UserName,
+                Email = userEntity.Email,
+                RegistrationDate = userEntity.RegistrationDate,
+                Street = userAddressEntity.Street,
+                PostalCode = userAddressEntity.PostalCode,
+                City = userAddressEntity.City
+            };
+            _userDetailsDTO = userDetailsDTO;
+            return userDetailsDTO;
+        }
         return null!;
+    }
+
+    public bool UpdateUserDetails(UserDetailsDTO updatedUser)
+    {
+        try
+        {
+            UserEntity updatedEntity = _userRepo.GetOne(x => x.Guid == _userId);
+
+            updatedEntity.UserProfile.FirstName = updatedUser.FirstName!;
+            updatedEntity.UserProfile.LastName = updatedUser.LastName!;
+            updatedEntity.Address.Street = updatedUser.Street;
+            updatedEntity.Address.PostalCode = updatedUser.PostalCode;
+            updatedEntity.Address.City = updatedUser.City;
+
+            var userEntity = _userRepo.Update(x => x.Guid == updatedEntity.Guid, updatedEntity);
+
+            if (userEntity != null)
+            {
+                return true;
+            }
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return false;
     }
 
     public bool DeleteUser()
     {
-        return true;
+        try
+        {
+            UserEntity userEntity = _userRepo.GetOne(x => x.Guid == _userId);
+            var result = _addressRepo.Delete(x => x.Id == userEntity.AddressId);
+            result = _userProfileRepo.Delete(x => x.Id == userEntity.UserProfileId);
+            result = _userRepo.Delete(x => x.Guid == _userId);
+            return result;
+        }
+        catch(Exception ex) { LogError(ex.Message); }
+        return false;
+    }
+
+    public void StoreUserId(Guid id) { _userId = id; }
+
+    public Guid GetStoredUserId() { return _userId; }
+
+    public UserDetailsDTO GetStoredUserDetailsDTO() {
+        if (_userDetailsDTO != null)
+            return _userDetailsDTO;
+        else
+            LogError("Stored UserDetailsDTO is null");
+        return null!;
     }
 
     /// <summary>

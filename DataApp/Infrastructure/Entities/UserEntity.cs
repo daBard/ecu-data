@@ -26,7 +26,7 @@ public class UserEntity
 
     [Required]
     [ForeignKey(nameof(UserProfile))]
-    public int RoleId { get; set; }
+    public int UserProfileId { get; set; }
 
     [Required]
     [ForeignKey(nameof(Address))]

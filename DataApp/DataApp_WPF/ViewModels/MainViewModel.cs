@@ -12,17 +12,10 @@ public partial class MainViewModel : ObservableObject
 {
     private readonly IServiceProvider? _serviceProvider;
 
-    private readonly UserService _userService;
-
-    public MainViewModel(IServiceProvider serviceProvider, UserService userService)
+    public MainViewModel(IServiceProvider serviceProvider)
     {
         _serviceProvider = serviceProvider;
         CurrentViewModel = _serviceProvider.GetRequiredService<UserListViewModel>();
-
-        _userService = userService;
-
-        _userService.CreateUser();
-
     }
 
     [ObservableProperty]
@@ -31,7 +24,7 @@ public partial class MainViewModel : ObservableObject
     [RelayCommand]
     private void NavigateToAddUser()
     {
-        CurrentViewModel = _serviceProvider!.GetRequiredService<AddPersonViewModel>();
+        CurrentViewModel = _serviceProvider!.GetRequiredService<UserAddViewModel>();
     }
 
     [RelayCommand]

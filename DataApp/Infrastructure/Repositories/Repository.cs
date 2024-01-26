@@ -48,14 +48,14 @@ public abstract class Repository<TEntity> where TEntity : class
     /// <summary>
     /// Get one row from db table
     /// </summary>
-    /// <param name="predicate">One unique param from topical entity</param>
+    /// <param name="expression">One unique param from topical entity</param>
     /// <returns>One topical entity if successful, else null</returns>
-    public virtual TEntity GetOne(Expression<Func<TEntity, bool>> predicate) 
+    public virtual TEntity GetOne(Expression<Func<TEntity, bool>> expression) 
     {
         try
         {
-            var result = _context.Set<TEntity>().FirstOrDefault(predicate, null!);
-            return result;
+            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+            return entity!;
         }
         catch (Exception ex) { LogError(ex.Message); }
         return null!;
@@ -66,19 +66,15 @@ public abstract class Repository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="entity">One entity of topical entity</param>
     /// <returns>Updated entity if successful, else null</returns>
-    public virtual TEntity Update(TEntity entity)
+    public virtual TEntity Update(Expression<Func<TEntity, bool>> expression, TEntity entity)
     {
         try
         {
-            var entityToUpdate = _context.Set<TEntity>().Find(entity);
-            if (entityToUpdate != null)
-            {
-                entityToUpdate = entity;
-                _context.Set<TEntity>().Update(entityToUpdate);
-                _context.SaveChanges();
+            var entityToUpdate = _context.Set<TEntity>().FirstOrDefault(expression);
+            _context.Entry<TEntity>(entityToUpdate!).CurrentValues.SetValues(entity);
+            _context.SaveChanges();
 
-                return entityToUpdate;
-            }
+            return entityToUpdate!;
         }
         catch (Exception ex) { LogError(ex.Message); }
         return null!;
@@ -87,13 +83,13 @@ public abstract class Repository<TEntity> where TEntity : class
     /// <summary>
     /// Delete one row in db table
     /// </summary>
-    /// <param name="predicate"></param>
+    /// <param name="expression"></param>
     /// <returns>True if entity is successfully removed, else false</returns>
-    public virtual bool Delete(Expression<Func<TEntity, bool>> predicate)
+    public virtual bool Delete(Expression<Func<TEntity, bool>> expression)
     {
         try
         {
-            var entity = _context.Set<TEntity>().FirstOrDefault(predicate);
+            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
             if (entity != null)
             {
                 _context.Set<TEntity>().Remove(entity);

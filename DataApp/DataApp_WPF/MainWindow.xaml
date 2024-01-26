@@ -10,7 +10,7 @@
         xmlns:views="clr-namespace:DataApp_WPF.Views"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         
-        Title="Person List" Height="450" Width="800" MinHeight="300" MinWidth="500"
+        Title="User List App - Admin view" Height="450" Width="800" MinHeight="300" MinWidth="500"
         Icon="/DataApp_WPF;component/Icons/WindowIcon.ico">
 
     <Grid>
@@ -19,32 +19,51 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Menu>
+        <Menu Padding="0, 5">
             <Menu.ItemsPanel>
                 <ItemsPanelTemplate>
                     <DockPanel HorizontalAlignment="Stretch"/>
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
 
-            <MenuItem Margin="5,0" Command="{Binding NavigateToPersonListCommand}">
-                <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/list.ico" />
-                </MenuItem.Icon>
-                <MenuItem.Header>
-                    <TextBlock Text="View List" VerticalAlignment="Center" />
-                </MenuItem.Header>
+            <MenuItem Header="Consumer">
+                
             </MenuItem>
 
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            
+            <MenuItem Header="Creator">
 
-            <MenuItem Margin="5,0" Command="{Binding NavigateToAddPersonCommand}">
-                <MenuItem.Icon>
-                    <Image Source="/DataApp_WPF;component/Icons/plus.ico" />
-                </MenuItem.Icon>
-                <MenuItem.Header>
-                    <TextBlock Text="Add New Person" VerticalAlignment="Center" />
-                </MenuItem.Header>
             </MenuItem>
+
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+            
+            <MenuItem Header="Admin">
+               
+                <MenuItem Margin="5,0" Command="{Binding NavigateToUserListCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/DataApp_WPF;component/Icons/list.ico" />
+                    </MenuItem.Icon>
+                    <MenuItem.Header>
+                        <TextBlock Text="View User List" VerticalAlignment="Center" />
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <MenuItem Margin="5,0" Command="{Binding NavigateToAddUserCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/DataApp_WPF;component/Icons/plus.ico" />
+                    </MenuItem.Icon>
+                    <MenuItem.Header>
+                        <TextBlock Text="Add New User" VerticalAlignment="Center" />
+                    </MenuItem.Header>
+                </MenuItem>
+
+                <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+
+                <MenuItem Header="Add New Product"></MenuItem>
+            </MenuItem>
+
+            
 
             <MenuItem Header="Help" HorizontalAlignment="Right" Command="{Binding HelpCommand}" />
         </Menu>
@@ -55,16 +74,16 @@
                     <views:UserListView />
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type viewmodels:AddPersonViewModel}">
-                    <views:AddPersonView />
+                <DataTemplate DataType="{x:Type viewmodels:UserAddViewModel}">
+                    <views:UserAddView />
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type viewmodels:PersonDetailsViewModel}">
-                    <views:PersonDetailsView />
+                <DataTemplate DataType="{x:Type viewmodels:UserDetailsViewModel}">
+                    <views:UserDetailsView />
                 </DataTemplate>
 
-                <DataTemplate DataType="{x:Type viewmodels:UpdatePersonViewModel}">
-                    <views:UpdatePersonView />
+                <DataTemplate DataType="{x:Type viewmodels:UserUpdateViewModel}">
+                    <views:UserUpdateView />
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
