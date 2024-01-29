@@ -82,7 +82,6 @@ public partial class UserUpdateViewModel : ObservableObject
         }
     }
 
-
     [RelayCommand]
     public void CancelBtn()
     {

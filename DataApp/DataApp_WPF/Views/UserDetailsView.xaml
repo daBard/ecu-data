@@ -18,6 +18,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
@@ -48,9 +50,13 @@
             </StackPanel>
         </Grid>
 
-        <TextBlock Grid.Row="2" Text="User Profile" Margin="0,20,0,0" FontSize="16" FontWeight="DemiBold"/>
+        <TextBlock Grid.Row="2" Text="Use Roles" Margin="0,20,0,0" FontSize="16" FontWeight="DemiBold"/>
 
-        <Grid Grid.Row="3">
+        <TextBlock Grid.Row="3" Text="User Profile"/>
+        
+        <TextBlock Grid.Row="4" Text="User Profile" Margin="0,20,0,0" FontSize="16" FontWeight="DemiBold"/>
+
+        <Grid Grid.Row="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -67,9 +73,9 @@
             </StackPanel>
         </Grid>
 
-        <TextBlock Grid.Row="4" Text="User Address" Margin="0,20,0,0" FontSize="16" FontWeight="DemiBold"/>
+        <TextBlock Grid.Row="6" Text="User Address" Margin="0,20,0,0" FontSize="16" FontWeight="DemiBold"/>
 
-        <Grid Grid.Row="5">
+        <Grid Grid.Row="7">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -94,7 +100,7 @@
 
         </Grid>
 
-        <Grid Grid.Row="6">
+        <Grid Grid.Row="8">
             <Button HorizontalAlignment="Left" VerticalAlignment="Bottom" Height="50" Width="200"  Content="Update User" Command="{Binding UpdateUserBtnCommand}"/>
             <Button HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="50" Width="100" Background="IndianRed" FontWeight="DemiBold" Content="Delete User" Command="{Binding DeleteUserBtnCommand}"/>
             <Button HorizontalAlignment="Right" VerticalAlignment="Bottom" Height="50" Width="200" FontWeight="DemiBold" Content="Back" Command="{Binding ToListBtnCommand}"/>

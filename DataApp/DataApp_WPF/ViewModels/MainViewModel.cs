@@ -3,9 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
-using Business.Services;
-using Helper;
-
 namespace DataApp_WPF.ViewModels;
 
 public partial class MainViewModel : ObservableObject
@@ -31,6 +28,12 @@ public partial class MainViewModel : ObservableObject
     public void NavigateToUserList()
     {
         CurrentViewModel = _serviceProvider!.GetRequiredService<UserListViewModel>();
+    }
+
+    [RelayCommand]
+    public void NavigateToManageRoles()
+    {
+        CurrentViewModel = _serviceProvider!.GetRequiredService<UserManageRolesViewModel>();
     }
 
     [RelayCommand]

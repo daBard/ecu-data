@@ -10,8 +10,6 @@ using Infrastructure.Repositories;
 using Helper;
 using Business.Services;
 
-
-
 namespace DataApp_WPF;
 
 public partial class App : Application
@@ -35,23 +33,28 @@ public partial class App : Application
         _builder = Host.CreateDefaultBuilder()
             .ConfigureServices (services =>
             {
-                services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_connectionStrings.Home));
+                services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_connectionStrings.Work));
 
                 services.AddScoped<ErrorLogger>();
                 services.AddScoped<UserService>();
+                services.AddScoped<RoleService>();
                 services.AddScoped<UserRepo>();
+                services.AddScoped<RoleRepo>();
                 services.AddScoped<AddressRepo>();
                 services.AddScoped<UserProfileRepo>();
+                services.AddScoped<UserRoleRepo>();
 
                 services.AddTransient<UserListViewModel>();
                 services.AddTransient<UserAddViewModel>();
                 services.AddTransient<UserDetailsViewModel>();
                 services.AddTransient<UserUpdateViewModel>();
+                services.AddTransient<UserManageRolesViewModel>();
 
                 services.AddTransient<UserListView>();
                 services.AddTransient<UserAddView>();
                 services.AddTransient<UserDetailsView>();
                 services.AddTransient<UserUpdateView>();
+                services.AddTransient<UserManageRolesView>();
 
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<MainWindow>();

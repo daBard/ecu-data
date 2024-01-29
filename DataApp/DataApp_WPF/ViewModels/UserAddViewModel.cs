@@ -2,9 +2,10 @@
 using Business.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using DataApp_WPF.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+
+using DataApp_WPF.Models;
 
 namespace DataApp_WPF.ViewModels;
 

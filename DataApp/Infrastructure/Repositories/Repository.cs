@@ -1,6 +1,8 @@
 ﻿using Helper;
 using Infrastructure.Contexts;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace Infrastructure.Repositories;
 
@@ -101,6 +103,17 @@ public abstract class Repository<TEntity> where TEntity : class
         return false;
     }
 
+    public virtual TEntity Exists(Expression<Func<TEntity, bool>> expression)
+    {
+        try
+        {
+            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+            if (entity != null)
+                return entity;
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return null!;
+    }
 
     /// <summary>
     /// Sends classname and error message to ErrorLogger in Helper

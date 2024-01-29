@@ -26,20 +26,8 @@
                 </ItemsPanelTemplate>
             </Menu.ItemsPanel>
 
-            <MenuItem Header="Consumer">
-                
-            </MenuItem>
+            <MenuItem Header="Users">
 
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            
-            <MenuItem Header="Creator">
-
-            </MenuItem>
-
-            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-            
-            <MenuItem Header="Admin">
-               
                 <MenuItem Margin="5,0" Command="{Binding NavigateToUserListCommand}">
                     <MenuItem.Icon>
                         <Image Source="/DataApp_WPF;component/Icons/list.ico" />
@@ -60,10 +48,22 @@
 
                 <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 
-                <MenuItem Header="Add New Product"></MenuItem>
+                <MenuItem Margin="5,0" Command="{Binding NavigateToManageRolesCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/DataApp_WPF;component/Icons/plus.ico" />
+                    </MenuItem.Icon>
+                    <MenuItem.Header>
+                        <TextBlock Text="Manage Roles" VerticalAlignment="Center" />
+                    </MenuItem.Header>
+                </MenuItem>
+                
             </MenuItem>
 
+            <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             
+            <MenuItem Header="Products">
+                <MenuItem Header="Add New Product"></MenuItem>
+            </MenuItem>
 
             <MenuItem Header="Help" HorizontalAlignment="Right" Command="{Binding HelpCommand}" />
         </Menu>
@@ -84,6 +84,10 @@
 
                 <DataTemplate DataType="{x:Type viewmodels:UserUpdateViewModel}">
                     <views:UserUpdateView />
+                </DataTemplate>
+
+                <DataTemplate DataType="{x:Type viewmodels:UserManageRolesViewModel}">
+                    <views:UserManageRolesView />
                 </DataTemplate>
             </ContentControl.Resources>
         </ContentControl>
