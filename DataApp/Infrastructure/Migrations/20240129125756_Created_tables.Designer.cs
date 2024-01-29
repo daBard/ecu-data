@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(LocalDataContext))]
-    [Migration("20240126092708_Created_tables")]
+    [Migration("20240129125756_Created_tables")]
     partial class Created_tables
     {
         /// <inheritdoc />
@@ -136,20 +136,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Entities.UserRoleEntity", b =>
                 {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserGuid")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("RoleId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("UserGuid")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("UserId", "RoleId");
+                    b.HasKey("UserGuid", "RoleId");
 
                     b.HasIndex("RoleId");
-
-                    b.HasIndex("UserGuid");
 
                     b.ToTable("UserRoles");
                 });
@@ -163,7 +158,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Infrastructure.Entities.UserProfileEntity", "UserProfile")
-                        .WithOne("User")
+                        .WithOne("Users")
                         .HasForeignKey("Infrastructure.Entities.UserEntity", "UserProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -176,13 +171,13 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("Infrastructure.Entities.UserRoleEntity", b =>
                 {
                     b.HasOne("Infrastructure.Entities.RoleEntity", "Role")
-                        .WithMany("UserRoles")
+                        .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Infrastructure.Entities.UserEntity", "User")
-                        .WithMany("UserRoles")
+                        .WithMany("Roles")
                         .HasForeignKey("UserGuid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -200,17 +195,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Infrastructure.Entities.RoleEntity", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.UserEntity", b =>
                 {
-                    b.Navigation("UserRoles");
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.UserProfileEntity", b =>
                 {
-                    b.Navigation("User")
+                    b.Navigation("Users")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

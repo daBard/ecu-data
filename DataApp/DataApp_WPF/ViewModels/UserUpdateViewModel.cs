@@ -7,6 +7,7 @@ using DataApp_WPF.Models;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace DataApp_WPF.ViewModels;
 
@@ -17,6 +18,7 @@ public partial class UserUpdateViewModel : ObservableObject
     private readonly ErrorLogger _errorLogger;
 
     private readonly UserDetailsDTO _userDetailsDTO;
+    private readonly ObservableCollection<UserRoleDTO> userRoleDTOs;
 
     public UserUpdateViewModel(IServiceProvider serviceProvider, UserService userService, ErrorLogger errorLogger)
     {

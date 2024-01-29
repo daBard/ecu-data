@@ -12,5 +12,5 @@ public class RoleEntity
     [Column(TypeName = "nvarchar(100)")]
     public string RoleName { get; set; } = null!;
 
-    public virtual ICollection<UserRoleEntity> UserRoles { get; set; } = new HashSet<UserRoleEntity>();
+    public virtual ICollection<UserRoleEntity> Users { get; set; } = new HashSet<UserRoleEntity>();
 }

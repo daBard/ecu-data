@@ -49,7 +49,13 @@ public class RoleService
         }
         
         return roleDTOs;
+    }
 
+    public IEnumerable<UserRoleDTO> GetUsersRoles(Guid guid)
+    {
+        //var userRoles = _userRoleRepo.GetAllFromGuid(x => x.UserId == guid);
+        IEnumerable<UserRoleDTO> test = new List<UserRoleDTO>();
+            return test;
     }
 
     public bool Delete(int id)

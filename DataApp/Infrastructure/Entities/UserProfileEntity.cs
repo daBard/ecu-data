@@ -19,5 +19,5 @@ public class UserProfileEntity
     [Column(TypeName = "date")]
     public DateTime Birthdate { get; set; }
 
-    public virtual UserEntity User { get; set; } = null!;
+    public virtual UserEntity Users { get; set; } = null!;
 }

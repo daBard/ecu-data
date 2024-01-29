@@ -36,6 +36,6 @@ public class UserEntity
 
     public virtual AddressEntity Address { get; set; } = null!;
 
-    public virtual ICollection<UserRoleEntity> UserRoles { get; set; } = new HashSet<UserRoleEntity>();
+    public virtual ICollection<UserRoleEntity> Roles { get; set; } = new HashSet<UserRoleEntity>();
 
 }

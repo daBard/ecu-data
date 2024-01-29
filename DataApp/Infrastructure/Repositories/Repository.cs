@@ -47,6 +47,17 @@ public abstract class Repository<TEntity> where TEntity : class
         return null!;
     }
 
+    public virtual IEnumerable<TEntity> GetAllFromGuid(Expression<Func<TEntity, bool>> expression)
+    {
+        try
+        {
+            var entities = _context.Set<TEntity>().Where(expression).ToList();
+            return entities;
+        }
+        catch(Exception ex) { LogError(ex.Message); }
+        return null!;
+    }
+
     /// <summary>
     /// Get one row from db table
     /// </summary>
