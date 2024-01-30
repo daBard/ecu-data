@@ -33,14 +33,14 @@ public class RoleService
         return false;
     }
 
-    public IEnumerable<UserRoleDTO> GetAll()
+    public IEnumerable<RoleDTO> GetAll()
     {
         var roleEntities = _roleRepo.GetAll();
-        List<UserRoleDTO> roleDTOs = new List<UserRoleDTO>();
+        List<RoleDTO> roleDTOs = new List<RoleDTO>();
 
         foreach (var entity in roleEntities)
         {
-            UserRoleDTO dto = new UserRoleDTO()
+            RoleDTO dto = new RoleDTO()
             {
                 Id = entity.Id,
                 RoleName = entity.RoleName
@@ -49,13 +49,6 @@ public class RoleService
         }
         
         return roleDTOs;
-    }
-
-    public IEnumerable<UserRoleDTO> GetUsersRoles(Guid guid)
-    {
-        //var userRoles = _userRoleRepo.GetAllFromGuid(x => x.UserId == guid);
-        IEnumerable<UserRoleDTO> test = new List<UserRoleDTO>();
-            return test;
     }
 
     public bool Delete(int id)

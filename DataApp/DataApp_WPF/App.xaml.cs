@@ -33,11 +33,12 @@ public partial class App : Application
         _builder = Host.CreateDefaultBuilder()
             .ConfigureServices (services =>
             {
-                services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_connectionStrings.Work));
+                services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_connectionStrings.Home));
 
                 services.AddScoped<ErrorLogger>();
                 services.AddScoped<UserService>();
                 services.AddScoped<RoleService>();
+                services.AddScoped<UserRoleService>();
                 services.AddScoped<UserRepo>();
                 services.AddScoped<RoleRepo>();
                 services.AddScoped<AddressRepo>();

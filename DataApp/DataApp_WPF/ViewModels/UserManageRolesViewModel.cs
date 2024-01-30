@@ -26,7 +26,7 @@ public partial class UserManageRolesViewModel : ObservableObject
     {
         var roleDTOs = _roleService.GetAll();
 
-        ObservableCollection<UserRoleDTO> tempRoles = new ObservableCollection<UserRoleDTO>();
+        ObservableCollection<RoleDTO> tempRoles = new ObservableCollection<RoleDTO>();
 
         if (roleDTOs.Any())
         {
@@ -39,7 +39,7 @@ public partial class UserManageRolesViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private ObservableCollection<UserRoleDTO> roles;
+    private ObservableCollection<RoleDTO> roles;
 
     [ObservableProperty]
     private string newRoleName;
