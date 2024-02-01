@@ -13,7 +13,6 @@ public partial class UserManageRolesViewModel : ObservableObject
     private readonly IServiceProvider _serviceProvider;
     private readonly RoleService _roleService;
 
-
     public UserManageRolesViewModel(IServiceProvider serviceProvider, RoleService roleService)
     {
         _serviceProvider = serviceProvider;
@@ -22,19 +21,15 @@ public partial class UserManageRolesViewModel : ObservableObject
         UpdateRoleList();
     }
 
+    /// <summary>
+    /// Gets all Roles as RoleDTOs and updates Role List in view
+    /// </summary>
     public void UpdateRoleList()
     {
         var roleDTOs = _roleService.GetAll();
 
-        ObservableCollection<RoleDTO> tempRoles = new ObservableCollection<RoleDTO>();
+        ObservableCollection<RoleDTO> tempRoles = new ObservableCollection<RoleDTO>(roleDTOs);
 
-        if (roleDTOs.Any())
-        {
-            foreach (var roleDTO in roleDTOs)
-            {
-                tempRoles.Add(roleDTO);
-            }
-        }
         Roles = tempRoles;
     }
 
@@ -44,6 +39,10 @@ public partial class UserManageRolesViewModel : ObservableObject
     [ObservableProperty]
     private string newRoleName;
 
+    /// <summary>
+    /// Removes the clicked Role from ALL Users, then removes Role
+    /// </summary>
+    /// <param name="id"></param>
     [RelayCommand]
     public void DeleteRoleBtn(int id)
     {
@@ -58,6 +57,11 @@ public partial class UserManageRolesViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Gathers user input from view and checks if required inputs has content
+    /// Sends RoleName to RoleService.Create()
+    /// Empties user input if successful, else fail Messagebox 
+    /// </summary>
     [RelayCommand]
     public void AddRoleBtn()
     {
@@ -77,6 +81,9 @@ public partial class UserManageRolesViewModel : ObservableObject
             MessageBox.Show("Please enter fields correctly!", "Fields contains null or whitespace", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
+    /// <summary>
+    /// Navigates to UserListView
+    /// </summary>
     [RelayCommand]
     public void BackBtn()
     {

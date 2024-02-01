@@ -5,9 +5,9 @@ namespace Infrastructure.Repositories;
 
 public class UserRoleRepo : Repository<UserRoleEntity>
 {
-    private readonly LocalDataContext _context;
+    private readonly LocalUserDataContext _context;
 
-    public UserRoleRepo(LocalDataContext context) : base(context)
+    public UserRoleRepo(LocalUserDataContext context) : base(context)
     {
         _context = context;
     }

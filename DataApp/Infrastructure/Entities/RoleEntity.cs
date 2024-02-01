@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Infrastructure.Interfaces;
 
 namespace Infrastructure.Entities;
 
-public class RoleEntity
+public class RoleEntity : IRoleEntity
 {
     [Key]
     public int Id { get; set; }

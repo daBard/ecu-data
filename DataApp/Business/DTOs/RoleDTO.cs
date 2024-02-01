@@ -1,6 +1,8 @@
-﻿namespace Business.DTOs;
+﻿using Business.Interfaces;
 
-public class RoleDTO
+namespace Business.DTOs;
+
+public class RoleDTO : IRoleDTO
 {
     public int Id { get; set; }
 

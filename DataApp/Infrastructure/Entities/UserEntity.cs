@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Infrastructure.Interfaces;
 
 namespace Infrastructure.Entities;
 
-public class UserEntity
+public class UserEntity : IUserEntity
 {
     [Key]
     public Guid Guid { get; set; }

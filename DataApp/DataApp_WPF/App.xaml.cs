@@ -16,16 +16,6 @@ public partial class App : Application
 {
     private static IHost? _builder;
 
-    //private readonly List<string> _connectionStrings = new List<string>
-    //{
-    //    // 0 HOME COMPUTER
-    //    @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\bardj\Documents\GitHub\ecu-data\DataApp\Infrastructure\Data\User_LocalDb.mdf;Integrated Security=True;Connect Timeout=30",
-    //    // 1 WORK LAPTOP
-    //    @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\jnbd05\Documents\Barden-GitHub\ECU\data\DataApp\Infrastructure\Data\User_LocalDb.mdf;Integrated Security=True;Connect Timeout=30",
-    //    // 2 MARIA DB
-    //    @""
-    //};
-
     private readonly ConnectionStrings _connectionStrings = new ConnectionStrings();
 
     public App()
@@ -33,7 +23,7 @@ public partial class App : Application
         _builder = Host.CreateDefaultBuilder()
             .ConfigureServices (services =>
             {
-                services.AddDbContext<LocalDataContext>(x => x.UseSqlServer(_connectionStrings.Home));
+                services.AddDbContext<LocalUserDataContext>(x => x.UseSqlServer(_connectionStrings.Work));
 
                 services.AddScoped<ErrorLogger>();
                 services.AddScoped<UserService>();

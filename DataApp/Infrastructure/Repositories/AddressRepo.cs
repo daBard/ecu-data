@@ -5,9 +5,9 @@ namespace Infrastructure.Repositories;
 
 public class AddressRepo : Repository<AddressEntity>
 {
-    private readonly LocalDataContext _context;
+    private readonly LocalUserDataContext _context;
 
-    public AddressRepo(LocalDataContext context) : base(context)
+    public AddressRepo(LocalUserDataContext context) : base(context)
     {
         _context = context;
     }

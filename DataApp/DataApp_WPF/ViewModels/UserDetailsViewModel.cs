@@ -68,6 +68,9 @@ public partial class UserDetailsViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<RoleDTO> userRoles;
 
+    /// <summary>
+    /// Navigates to UserUpdateView
+    /// </summary>
     [RelayCommand]
     public void UpdateUserBtn()
     {
@@ -76,6 +79,9 @@ public partial class UserDetailsViewModel : ObservableObject
 
     }
 
+    /// <summary>
+    /// Navigates to UserListView
+    /// </summary>
     [RelayCommand]
     public void ToListBtn()
     {
@@ -84,6 +90,10 @@ public partial class UserDetailsViewModel : ObservableObject
 
     }
 
+    /// <summary>
+    /// Deletes User shown in view
+    /// Navigates to UserListView if successful, else fail MessageBox
+    /// </summary>
     [RelayCommand]
     public void DeleteUserBtn()
     {

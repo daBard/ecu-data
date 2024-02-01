@@ -1,11 +1,12 @@
 ﻿using Business.DTOs;
+using Business.Interfaces;
 using Helper;
 using Infrastructure.Entities;
 using Infrastructure.Repositories;
 
 namespace Business.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly ErrorLogger _errorLogger;
     private readonly UserRepo _userRepo;
@@ -23,6 +24,11 @@ public class UserService
         _userProfileRepo = userProfileRepo;
     }
 
+    /// <summary>
+    /// Takes a UserAddDTO and creates a new user with UserEntity, AddressEntity and UserProfileEntity
+    /// </summary>
+    /// <param name="newUser">Takes an object of type UserAddDTO</param>
+    /// <returns>True if successful, else false</returns>
     public bool CreateUser(UserAddDTO newUser)
     {
         try
@@ -34,7 +40,7 @@ public class UserService
             userEntity.Password = newUser.Password; //HASH PASSWORD
             userEntity.Email = newUser.Email;
 
-            userEntity.RegistrationDate = DateTime.Now; 
+            userEntity.RegistrationDate = DateTime.Now;
 
             AddressEntity addressEntity = new AddressEntity();
 
@@ -55,9 +61,13 @@ public class UserService
         return false;
     }
 
+    /// <summary>
+    /// Gets all Users from Repo
+    /// </summary>
+    /// <returns>An IEnumerable of UserListDTOs</returns>
     public IEnumerable<UserListDTO> GetUserList()
     {
-        List<UserListDTO> listUserDTOs= new List<UserListDTO>();
+        List<UserListDTO> listUserDTOs = new List<UserListDTO>();
 
         var repoUsers = _userRepo.GetAll();
 
@@ -73,6 +83,11 @@ public class UserService
         return listUserDTOs;
     }
 
+    /// <summary>
+    /// Gets details for one User 
+    /// </summary>
+    /// <param name="userDetailsId">User Guid</param>
+    /// <returns>A UserDetails DTO if successful, else null</returns>
     public UserDetailsDTO GetUserDetails(Guid userDetailsId)
     {
         var userEntity = _userRepo.GetOne(x => (x.Guid == userDetailsId));
@@ -99,6 +114,11 @@ public class UserService
         return null!;
     }
 
+    /// <summary>
+    /// Updates details for one User
+    /// </summary>
+    /// <param name="updatedUser">Object of type UserDetailsDTO</param>
+    /// <returns>True if successful, else false</returns>
     public bool UpdateUserDetails(UserDetailsDTO updatedUser)
     {
         try
@@ -122,6 +142,10 @@ public class UserService
         return false;
     }
 
+    /// <summary>
+    /// Deletes User currently shown in UserDetailsView
+    /// </summary>
+    /// <returns>True if successful, else false</returns>
     public bool DeleteUser()
     {
         try
@@ -132,7 +156,7 @@ public class UserService
             result = _userRepo.Delete(x => x.Guid == _userId);
             return result;
         }
-        catch(Exception ex) { LogError(ex.Message); }
+        catch (Exception ex) { LogError(ex.Message); }
         return false;
     }
 
@@ -140,7 +164,8 @@ public class UserService
 
     public Guid GetStoredUserId() { return _userId; }
 
-    public UserDetailsDTO GetStoredUserDetailsDTO() {
+    public UserDetailsDTO GetStoredUserDetailsDTO()
+    {
         if (_userDetailsDTO != null)
             return _userDetailsDTO;
         else

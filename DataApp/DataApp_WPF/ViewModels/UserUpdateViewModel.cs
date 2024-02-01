@@ -63,37 +63,11 @@ public partial class UserUpdateViewModel : ObservableObject
 
     }
 
-    [ObservableProperty]
-    private UserDetailsModel userUpdateDetailsForm;
-
-    [ObservableProperty]
-    private ObservableCollection<RoleDTO> userRoles;
-
-    [ObservableProperty]
-    private ObservableCollection<RoleDTO> roles;
-
-    [RelayCommand]
-    public void AddRoleBtn(int id)
-    {
-        if (_userRoleService.AddRoleToUser(_userDetailsDTO.Guid, id))
-        {
-            UpdateRoleLists();
-        }
-        else
-            MessageBox.Show("Role could not be added to user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-    }
-
-    [RelayCommand]
-    public void RemoveRoleBtn(int id)
-    {
-        if (_userRoleService.RemoveRoleFromUser(_userDetailsDTO.Guid, id))
-        {
-            UpdateRoleLists();
-        }
-        else
-            MessageBox.Show("Role could not be removed from user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-    }
-
+    /// <summary>
+    /// Gets all Avaliable Roles to List and all User Roles to List
+    /// Removes User Roles in User Roles List from Avaliable Roles List
+    /// Updates both Lists in view
+    /// </summary>
     public void UpdateRoleLists()
     {
         var roleDTOs = _roleService.GetAll();
@@ -115,6 +89,50 @@ public partial class UserUpdateViewModel : ObservableObject
         UserRoles = tempUserRoles;
     }
 
+    [ObservableProperty]
+    private UserDetailsModel userUpdateDetailsForm;
+
+    [ObservableProperty]
+    private ObservableCollection<RoleDTO> userRoles;
+
+    [ObservableProperty]
+    private ObservableCollection<RoleDTO> roles;
+
+    /// <summary>
+    /// Adds clicked Role from Avaliable Roles to UserRoles
+    /// </summary>
+    /// <param name="id">Role id as int binded to Avaliable Roles list item in view</param>
+    [RelayCommand]
+    public void AddRoleBtn(int id)
+    {
+        if (_userRoleService.AddRoleToUser(_userDetailsDTO.Guid, id))
+        {
+            UpdateRoleLists();
+        }
+        else
+            MessageBox.Show("Role could not be added to user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    /// <summary>
+    /// Removes the clicked Role from UserRoles in view
+    /// </summary>
+    /// <param name="id">Role id as int binded to User Roles list item in view</param>
+    [RelayCommand]
+    public void RemoveRoleBtn(int id)
+    {
+        if (_userRoleService.RemoveRoleFromUser(_userDetailsDTO.Guid, id))
+        {
+            UpdateRoleLists();
+        }
+        else
+            MessageBox.Show("Role could not be removed from user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    /// <summary>
+    /// Gathers user input from view and checks if required inputs has content
+    /// Creates UserDetailsDTO and sends to UserService.UpdateUserDetails()
+    /// Navigates to UserDetailsView if successful, else fail Messagebox
+    /// </summary>
     [RelayCommand]
     public void UpdateUserBtn()
     {
@@ -145,6 +163,9 @@ public partial class UserUpdateViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Navigates to UserDetailsView
+    /// </summary>
     [RelayCommand]
     public void CancelBtn()
     {

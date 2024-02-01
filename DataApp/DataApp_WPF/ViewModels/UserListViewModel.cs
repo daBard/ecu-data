@@ -45,6 +45,10 @@ public partial class UserListViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<UserListModel> _users;
 
+    /// <summary>
+    /// Stores clicked User Guid in UserService.StoreUserId() and navigates to UserDetailsView
+    /// </summary>
+    /// <param name="_id">User Guid</param>
     [RelayCommand]
     public void ShowUserDetails(Guid _id)
     {

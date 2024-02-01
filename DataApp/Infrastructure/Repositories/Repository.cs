@@ -8,9 +8,9 @@ namespace Infrastructure.Repositories;
 
 public abstract class Repository<TEntity> where TEntity : class
 {
-    private readonly LocalDataContext _context;
+    private readonly LocalUserDataContext _context;
 
-    protected Repository(LocalDataContext context)
+    protected Repository(LocalUserDataContext context)
     {
         _context = context;
     }

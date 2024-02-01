@@ -1,11 +1,12 @@
 ﻿using Business.DTOs;
+using Business.Interfaces;
 using Helper;
 using Infrastructure.Entities;
 using Infrastructure.Repositories;
 
 namespace Business.Services;
 
-public class RoleService
+public class RoleService : IRoleService
 {
     private readonly RoleRepo _roleRepo;
     private readonly UserRoleRepo _userRoleRepo;
@@ -18,39 +19,60 @@ public class RoleService
         _errorLogger = errorLogger;
     }
 
+    /// <summary>
+    /// Creates a new role
+    /// </summary>
+    /// <param name="roleName">The role name as string</param>
+    /// <returns>True if successful, else false</returns>
     public bool Create(string roleName)
     {
-        RoleEntity roleEntity = new RoleEntity() 
+        try
         {
-            RoleName = roleName
-        };
+            RoleEntity roleEntity = new RoleEntity()
+            {
+                RoleName = roleName
+            };
 
-        var result = _roleRepo.Create(roleEntity);
+            var result = _roleRepo.Create(roleEntity);
 
-        if (result != null)
-            return true;
+            if (result != null)
+                return true;
+        }
+        catch (Exception ex) { LogError(ex.Message); }
 
         return false;
     }
 
+    /// <summary>
+    /// Gets a list of all roles
+    /// </summary>
+    /// <returns>An IEnumerable of type RoleDTO</returns>
     public IEnumerable<RoleDTO> GetAll()
     {
-        var roleEntities = _roleRepo.GetAll();
         List<RoleDTO> roleDTOs = new List<RoleDTO>();
-
-        foreach (var entity in roleEntities)
+        try
         {
-            RoleDTO dto = new RoleDTO()
+            var roleEntities = _roleRepo.GetAll();
+
+            foreach (var entity in roleEntities)
             {
-                Id = entity.Id,
-                RoleName = entity.RoleName
-            };
-            roleDTOs.Add(dto);
+                RoleDTO dto = new RoleDTO()
+                {
+                    Id = entity.Id,
+                    RoleName = entity.RoleName
+                };
+                roleDTOs.Add(dto);
+            }
         }
-        
+        catch (Exception ex) { LogError(ex.Message); }
         return roleDTOs;
     }
 
+    /// <summary>
+    /// Deletes a role
+    /// </summary>
+    /// <param name="id">Role id as int</param>
+    /// <returns>True if successful, else false</returns>
     public bool Delete(int id)
     {
         try
@@ -72,6 +94,11 @@ public class RoleService
         return false;
     }
 
+    /// <summary>
+    /// Takes a role name and checks if it already exists
+    /// </summary>
+    /// <param name="roleName">Role name as string</param>
+    /// <returns>A RoleEntity if successful, else null</returns>
     public RoleEntity Exists(string roleName)
     {
         try
@@ -79,7 +106,7 @@ public class RoleService
             var result = _roleRepo.Exists(x => x.RoleName == roleName);
             return result;
         }
-        catch(Exception ex) { LogError(ex.Message); }
+        catch (Exception ex) { LogError(ex.Message); }
         return null!;
     }
 

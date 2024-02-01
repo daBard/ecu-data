@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(LocalDataContext))]
+    [DbContext(typeof(LocalUserDataContext))]
     [Migration("20240129125756_Created_tables")]
     partial class Created_tables
     {

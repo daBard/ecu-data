@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using Business.Interfaces;
 
 namespace Business.DTOs;
 
-public class UserListDTO()
+public class UserListDTO : IUserListDTO
 {
     public Guid Id { get; set; }
     public string UserName { get; set; } = null!;

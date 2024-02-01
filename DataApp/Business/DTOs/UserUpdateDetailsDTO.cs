@@ -1,6 +1,8 @@
-﻿namespace Business.DTOs;
+﻿using Business.Interfaces;
 
-public class UserUpdateDetailsDTO
+namespace Business.DTOs;
+
+public class UserUpdateDetailsDTO : IUserUpdateDetailsDTO
 {
     public Guid Guid { get; set; }
     public string? FirstName { get; set; }

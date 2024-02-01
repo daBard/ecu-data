@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Infrastructure.Interfaces;
 
 namespace Infrastructure.Entities;
 
-public class UserProfileEntity
+public class UserProfileEntity : IUserProfileEntity
 {
     [Key]
     public int Id { get; set; }
@@ -11,7 +12,7 @@ public class UserProfileEntity
     [Required]
     [StringLength(100)]
     public string FirstName { get; set; } = null!;
-    
+
     [Required]
     [StringLength(100)]
     public string LastName { get; set; } = null!;

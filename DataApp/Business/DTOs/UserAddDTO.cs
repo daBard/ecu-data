@@ -1,6 +1,8 @@
-﻿namespace Business.DTOs
+﻿using Business.Interfaces;
+
+namespace Business.DTOs
 {
-    public class UserAddDTO
+    public class UserAddDTO : IUserAddDTO
     {
         public Guid Id { get; } = new Guid();
         public string UserName { get; set; } = null!;

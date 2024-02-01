@@ -17,10 +17,15 @@ public partial class UserAddViewModel(IServiceProvider serviceProvider, UserServ
     [ObservableProperty]
     private UserAddModel createUserForm = new();
 
+    /// <summary>
+    /// Gathers user input from view and checks if required inputs has content
+    /// Creates UserAddDTO and sends to UserService.CreateUser()
+    /// Navigates to UserListView if successful, else fail Messagebox
+    /// </summary>
     [RelayCommand]
     public void AddUserBtn()
     {
-        //This needs regex instead
+        //!! This needs regex instead
         if (!string.IsNullOrWhiteSpace(CreateUserForm.UserName) && 
             !string.IsNullOrWhiteSpace(CreateUserForm.Email) && 
             !string.IsNullOrWhiteSpace(CreateUserForm.Password) && 
@@ -47,6 +52,9 @@ public partial class UserAddViewModel(IServiceProvider serviceProvider, UserServ
         }
     }
 
+    /// <summary>
+    /// Navigates to UserListView
+    /// </summary>
     [RelayCommand]
     public void CancelBtn()
     {
