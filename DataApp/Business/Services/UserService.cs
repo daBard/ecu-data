@@ -83,6 +83,7 @@ public class UserService
 
             UserDetailsDTO userDetailsDTO = new UserDetailsDTO()
             {
+                Guid = userEntity.Guid,
                 FirstName = userProfileEntity.FirstName,
                 LastName = userProfileEntity.LastName,
                 UserName = userEntity.UserName,

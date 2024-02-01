@@ -6,6 +6,8 @@ using Business.Services;
 using DataApp_WPF.Models;
 using Helper;
 using System.Windows;
+using Business.DTOs;
+using System.Collections.ObjectModel;
 
 
 namespace DataApp_WPF.ViewModels;
@@ -14,14 +16,16 @@ public partial class UserDetailsViewModel : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly UserService _userService;
+    private readonly UserRoleService _userRoleService;
     private readonly ErrorLogger _errorLogger;
 
     private readonly Guid _userId;
 
-    public UserDetailsViewModel(IServiceProvider serviceProvider, UserService userService, ErrorLogger errorLogger)
+    public UserDetailsViewModel(IServiceProvider serviceProvider, UserService userService, UserRoleService userRoleService, ErrorLogger errorLogger)
     {
         _serviceProvider = serviceProvider;
         _userService = userService;
+        _userRoleService = userRoleService;
         _errorLogger = errorLogger;
 
         _userId = _userService.GetStoredUserId();
@@ -49,10 +53,20 @@ public partial class UserDetailsViewModel : ObservableObject
             _errorLogger.Logger("UserDetailsViewModel.Constructor", "UserDetailsForm is null");
             UserDetailsForm = null!;
         }
+
+        var userRolesDTOs = _userRoleService.GetUserRoles(_userId);
+
+        if (userRolesDTOs != null)
+        {
+            UserRoles = new ObservableCollection<RoleDTO>(userRolesDTOs);
+        }
     }
 
     [ObservableProperty]
     private UserDetailsModel userDetailsForm;
+
+    [ObservableProperty]
+    private ObservableCollection<RoleDTO> userRoles;
 
     [RelayCommand]
     public void UpdateUserBtn()

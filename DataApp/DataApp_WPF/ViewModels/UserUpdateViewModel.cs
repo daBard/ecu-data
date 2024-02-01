@@ -15,15 +15,18 @@ public partial class UserUpdateViewModel : ObservableObject
 {
     private readonly IServiceProvider _serviceProvider;
     private readonly UserService _userService;
+    private readonly RoleService _roleService;
+    private readonly UserRoleService _userRoleService;
     private readonly ErrorLogger _errorLogger;
-
+   
     private readonly UserDetailsDTO _userDetailsDTO;
-    private readonly ObservableCollection<UserRoleDTO> userRoleDTOs;
 
-    public UserUpdateViewModel(IServiceProvider serviceProvider, UserService userService, ErrorLogger errorLogger)
+    public UserUpdateViewModel(IServiceProvider serviceProvider, UserService userService, RoleService roleService, UserRoleService userRoleService, ErrorLogger errorLogger)
     {
         _serviceProvider = serviceProvider;
         _userService = userService;
+        _roleService = roleService;
+        _userRoleService = userRoleService;
         _errorLogger = errorLogger;
 
         _userDetailsDTO = _userService.GetStoredUserDetailsDTO();
@@ -42,6 +45,8 @@ public partial class UserUpdateViewModel : ObservableObject
                 City = _userDetailsDTO.City
             };
 
+            var userRolesDTO = _userRoleService.GetUserRoles(_userDetailsDTO.Guid);
+
             UserUpdateDetailsForm = userDetails;
         }
         else
@@ -49,10 +54,66 @@ public partial class UserUpdateViewModel : ObservableObject
             _errorLogger.Logger("UserDetailsViewModel.Constructor", "UserDetailsForm is null");
             UserUpdateDetailsForm = null!;
         }
+
+        var avaliableRolesDTO = _roleService.GetAll();
+        
+        ObservableCollection<RoleDTO> avaliableRoleList = new ObservableCollection<RoleDTO>(avaliableRolesDTO);
+
+        UpdateRoleLists();
+
     }
 
     [ObservableProperty]
     private UserDetailsModel userUpdateDetailsForm;
+
+    [ObservableProperty]
+    private ObservableCollection<RoleDTO> userRoles;
+
+    [ObservableProperty]
+    private ObservableCollection<RoleDTO> roles;
+
+    [RelayCommand]
+    public void AddRoleBtn(int id)
+    {
+        if (_userRoleService.AddRoleToUser(_userDetailsDTO.Guid, id))
+        {
+            UpdateRoleLists();
+        }
+        else
+            MessageBox.Show("Role could not be added to user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    [RelayCommand]
+    public void RemoveRoleBtn(int id)
+    {
+        if (_userRoleService.RemoveRoleFromUser(_userDetailsDTO.Guid, id))
+        {
+            UpdateRoleLists();
+        }
+        else
+            MessageBox.Show("Role could not be removed from user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
+
+    public void UpdateRoleLists()
+    {
+        var roleDTOs = _roleService.GetAll();
+        var userRoleDTOs = _userRoleService.GetUserRoles(_userDetailsDTO.Guid);
+
+        ObservableCollection<RoleDTO> tempRoles = new ObservableCollection<RoleDTO>();
+        ObservableCollection<RoleDTO> tempUserRoles = new ObservableCollection<RoleDTO>(userRoleDTOs);
+
+        if (roleDTOs.Any())
+        {
+            foreach (var roleDTO in roleDTOs)
+            {
+                if (!userRoleDTOs.Any(x => x.Id == roleDTO.Id))
+                    tempRoles.Add(roleDTO);
+            }
+        }
+
+        Roles = tempRoles;
+        UserRoles = tempUserRoles;
+    }
 
     [RelayCommand]
     public void UpdateUserBtn()
@@ -88,6 +149,6 @@ public partial class UserUpdateViewModel : ObservableObject
     public void CancelBtn()
     {
         var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
-        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UserListViewModel>();
+        mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UserDetailsViewModel>();
     }
 }

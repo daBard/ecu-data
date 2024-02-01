@@ -67,14 +67,7 @@
                     </ListView.ItemContainerStyle>
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-
-                                <TextBlock Grid.Column="0" Padding="0,5" Text="{Binding RoleName}" />
-                            </Grid>
-
+                            <TextBlock Grid.Column="0" Padding="0,5" Text="{Binding RoleName}" />
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
