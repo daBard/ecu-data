@@ -10,6 +10,6 @@ public partial class UserAddView : UserControl
 {
     public UserAddView()
     {
-        InitializeComponent();
+        InitializeComponent();   
     }
 }

@@ -53,8 +53,13 @@
                 </StackPanel>
 
                 <StackPanel Grid.Column="0" Grid.Row="2" Margin="10,5">
-                    <Label Content="Password"></Label>
-                    <TextBox MinWidth="200" Text="{Binding CreateUserForm.Password}"></TextBox>
+                    <Label Content="Password" />
+                    <TextBox MinWidth="200" Text="{Binding CreateUserForm.Password}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="2" Margin="10,5">
+                    <Label Content="Confirm Password" />
+                    <TextBox MinWidth="200" Text="{Binding CreateUserForm.ConfirmPassword}" />
                 </StackPanel>
             </Grid>
 

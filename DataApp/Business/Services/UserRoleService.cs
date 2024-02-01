@@ -20,12 +20,43 @@ public class UserRoleService : IUserRoleService
     }
 
     /// <summary>
+    /// Takes Users new list of Roles and adds or removes in database as needed
+    /// </summary>
+    /// <param name="roleDTOs">IEnumerable of type RoleDTO</param>
+    /// <param name="userGuid">User Guid</param>
+    /// <returns>True if successful, else false</returns>
+    public bool UpdateUserRoles(IEnumerable<RoleDTO> roleDTOs, Guid userGuid)
+    {
+        try
+        {
+            var roles = _roleRepo.GetAll();
+
+            foreach (RoleEntity role in roles)
+            {
+                if (roleDTOs.Any(x => x.Id == role.Id))
+                {
+                    if (_userRoleRepo.Exists(x => x.RoleId == role.Id && x.UserGuid == userGuid) == null)
+                        AddRoleToUser(userGuid, role.Id);
+                }
+                else
+                {
+                    if (_userRoleRepo.Exists(x => x.RoleId == role.Id && x.UserGuid == userGuid) != null)
+                        RemoveRoleFromUser(userGuid, role.Id);
+                }
+            }
+            return true;
+        }
+        catch (Exception ex) { LogError(ex.Message); }
+        return false;
+    }
+
+    /// <summary>
     /// Adds a role to a user, returns bool
     /// </summary>
     /// <param name="userGuid">User Guid</param>
     /// <param name="roleId">Role Id to be added</param>
     /// <returns>True if successful, else false</returns>
-    public bool AddRoleToUser(Guid userGuid, int roleId)
+    private bool AddRoleToUser(Guid userGuid, int roleId)
     {
         try
         {
@@ -83,7 +114,7 @@ public class UserRoleService : IUserRoleService
     /// <param name="userGuid">User Guid</param>
     /// <param name="roleId">Role Id to be removed</param>
     /// <returns></returns>
-    public bool RemoveRoleFromUser(Guid userGuid, int roleId)
+    private bool RemoveRoleFromUser(Guid userGuid, int roleId)
     {
         try
         {

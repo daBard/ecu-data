@@ -4,6 +4,7 @@ using Infrastructure.Interfaces;
 
 namespace Infrastructure.Entities;
 
+//!! Password should be its own Entity
 public class UserEntity : IUserEntity
 {
     [Key]

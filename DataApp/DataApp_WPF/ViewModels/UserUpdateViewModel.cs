@@ -21,6 +21,9 @@ public partial class UserUpdateViewModel : ObservableObject
    
     private readonly UserDetailsDTO _userDetailsDTO;
 
+    internal IEnumerable<RoleDTO> _roleDTOs;
+    internal List<RoleDTO> _userRoleDTOs;
+
     public UserUpdateViewModel(IServiceProvider serviceProvider, UserService userService, RoleService roleService, UserRoleService userRoleService, ErrorLogger errorLogger)
     {
         _serviceProvider = serviceProvider;
@@ -45,7 +48,7 @@ public partial class UserUpdateViewModel : ObservableObject
                 City = _userDetailsDTO.City
             };
 
-            var userRolesDTO = _userRoleService.GetUserRoles(_userDetailsDTO.Guid);
+            _userRoleDTOs = new List<RoleDTO>(_userRoleService.GetUserRoles(_userDetailsDTO.Guid));
 
             UserUpdateDetailsForm = userDetails;
         }
@@ -55,12 +58,13 @@ public partial class UserUpdateViewModel : ObservableObject
             UserUpdateDetailsForm = null!;
         }
 
-        var avaliableRolesDTO = _roleService.GetAll();
-        
-        ObservableCollection<RoleDTO> avaliableRoleList = new ObservableCollection<RoleDTO>(avaliableRolesDTO);
+        //var avaliableRolesDTO = _roleService.GetAll();
+
+        //ObservableCollection<RoleDTO> avaliableRoleList = new ObservableCollection<RoleDTO>(avaliableRolesDTO);
+
+        _roleDTOs = _roleService.GetAll();
 
         UpdateRoleLists();
-
     }
 
     /// <summary>
@@ -70,17 +74,14 @@ public partial class UserUpdateViewModel : ObservableObject
     /// </summary>
     public void UpdateRoleLists()
     {
-        var roleDTOs = _roleService.GetAll();
-        var userRoleDTOs = _userRoleService.GetUserRoles(_userDetailsDTO.Guid);
-
         ObservableCollection<RoleDTO> tempRoles = new ObservableCollection<RoleDTO>();
-        ObservableCollection<RoleDTO> tempUserRoles = new ObservableCollection<RoleDTO>(userRoleDTOs);
+        ObservableCollection<RoleDTO> tempUserRoles = new ObservableCollection<RoleDTO>(_userRoleDTOs);
 
-        if (roleDTOs.Any())
+        if (_roleDTOs.Any())
         {
-            foreach (var roleDTO in roleDTOs)
+            foreach (var roleDTO in _roleDTOs)
             {
-                if (!userRoleDTOs.Any(x => x.Id == roleDTO.Id))
+                if (!_userRoleDTOs.Any(x => x.Id == roleDTO.Id))
                     tempRoles.Add(roleDTO);
             }
         }
@@ -105,12 +106,18 @@ public partial class UserUpdateViewModel : ObservableObject
     [RelayCommand]
     public void AddRoleBtn(int id)
     {
-        if (_userRoleService.AddRoleToUser(_userDetailsDTO.Guid, id))
-        {
-            UpdateRoleLists();
-        }
-        else
-            MessageBox.Show("Role could not be added to user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+        RoleDTO addedRoleDTO = _roleDTOs.FirstOrDefault(x => x.Id == id)!;
+
+        _userRoleDTOs.Add(addedRoleDTO);
+
+        UpdateRoleLists();
+
+        //if (_userRoleService.AddRoleToUser(_userDetailsDTO.Guid, id))
+        //{
+        //    UpdateRoleLists();
+        //}
+        //else
+        //    MessageBox.Show("Role could not be added to user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     /// <summary>
@@ -120,12 +127,18 @@ public partial class UserUpdateViewModel : ObservableObject
     [RelayCommand]
     public void RemoveRoleBtn(int id)
     {
-        if (_userRoleService.RemoveRoleFromUser(_userDetailsDTO.Guid, id))
-        {
-            UpdateRoleLists();
-        }
-        else
-            MessageBox.Show("Role could not be removed from user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+        //RoleDTO removedRoleDTO = _roleDTOs.FirstOrDefault(x => x.Id == id)!;
+
+        _userRoleDTOs.RemoveAll(x => x.Id == id);
+
+        UpdateRoleLists();
+
+        //if (_userRoleService.RemoveRoleFromUser(_userDetailsDTO.Guid, id))
+        //{
+        //    UpdateRoleLists();
+        //}
+        //else
+        //    MessageBox.Show("Role could not be removed from user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     /// <summary>
@@ -136,6 +149,8 @@ public partial class UserUpdateViewModel : ObservableObject
     [RelayCommand]
     public void UpdateUserBtn()
     {
+        bool success = false;
+
         if (!string.IsNullOrWhiteSpace(UserUpdateDetailsForm.UserName) &&
         !string.IsNullOrWhiteSpace(UserUpdateDetailsForm.Email) &&
         !string.IsNullOrWhiteSpace(UserUpdateDetailsForm.FirstName) &&
@@ -149,7 +164,11 @@ public partial class UserUpdateViewModel : ObservableObject
             updatedUser.PostalCode = UserUpdateDetailsForm.PostalCode;
             updatedUser.City = UserUpdateDetailsForm.City;
 
-            if (_userService.UpdateUserDetails(updatedUser))
+            success = _userService.UpdateUserDetails(updatedUser);
+
+            success = _userRoleService.UpdateUserRoles(_userRoleDTOs, _userDetailsDTO.Guid);
+
+            if (success)
             {
                 var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
                 mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UserDetailsViewModel>();
