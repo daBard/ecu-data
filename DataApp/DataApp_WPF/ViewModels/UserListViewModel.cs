@@ -18,28 +18,33 @@ public partial class UserListViewModel : ObservableObject
         _serviceProvider = serviceProvider;
         _userService = userService;
 
-        var listUserDTOs = _userService.GetUserList();
-        ObservableCollection<UserListModel> tempUsers = new ObservableCollection<UserListModel>();
-
-        if (listUserDTOs != null)
+        Task.Run(async () =>
         {
-            foreach (var userDTO in listUserDTOs)
+            var listUserDTOs = await _userService.GetUserListAsync();
+            ObservableCollection<UserListModel> tempUsers = new ObservableCollection<UserListModel>();
+
+            if (listUserDTOs != null)
+            {
+                foreach (var userDTO in listUserDTOs)
+                {
+                    UserListModel user = new UserListModel();
+                    user.Id = userDTO.Id;
+                    user.UserName = userDTO.UserName;
+                    user.Email = userDTO.Email;
+                    tempUsers.Add(user);
+                }
+            }
+            else
             {
                 UserListModel user = new UserListModel();
-                user.Id = userDTO.Id;
-                user.UserName = userDTO.UserName;
-                user.Email = userDTO.Email;
+                user.UserName = "No users in list!";
                 tempUsers.Add(user);
             }
-        }
-        else
-        {
-            UserListModel user = new UserListModel();
-            user.UserName = "No users in list!";
-            tempUsers.Add(user);
-        }
 
-        Users = tempUsers;
+            Users = tempUsers;
+        });
+
+        
     }
 
     [ObservableProperty]

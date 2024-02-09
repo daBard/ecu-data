@@ -1,13 +1,14 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
+using System.Windows;
+using System.Collections.ObjectModel;
+using System.Windows.Threading;
 
 using Helper;
 using Business.DTOs;
 using Business.Services;
 using DataApp_WPF.Models;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
-using System.Windows;
-using System.Collections.ObjectModel;
 
 namespace DataApp_WPF.ViewModels;
 
@@ -19,10 +20,10 @@ public partial class UserUpdateViewModel : ObservableObject
     private readonly UserRoleService _userRoleService;
     private readonly ErrorLogger _errorLogger;
    
-    private readonly UserDetailsDTO _userDetailsDTO;
+    private readonly UserDetailsDTO _userDetailsDTO = null!;
 
-    internal IEnumerable<RoleDTO> _roleDTOs;
-    internal List<RoleDTO> _userRoleDTOs;
+    internal IEnumerable<RoleDTO> _roleDTOs = null!;
+    internal List<RoleDTO> _userRoleDTOs = null!;
 
     public UserUpdateViewModel(IServiceProvider serviceProvider, UserService userService, RoleService roleService, UserRoleService userRoleService, ErrorLogger errorLogger)
     {
@@ -34,37 +35,39 @@ public partial class UserUpdateViewModel : ObservableObject
 
         _userDetailsDTO = _userService.GetStoredUserDetailsDTO();
 
-        if (_userDetailsDTO != null)
+        Task.Run(async () =>
         {
-            UserDetailsModel userDetails = new UserDetailsModel()
+            if (_userDetailsDTO != null)
             {
-                UserName = _userDetailsDTO.UserName,
-                Email = _userDetailsDTO.Email,
-                RegistrationDate = _userDetailsDTO.RegistrationDate,
-                FirstName = _userDetailsDTO.FirstName,
-                LastName = _userDetailsDTO.LastName,
-                Street = _userDetailsDTO.Street,
-                PostalCode = _userDetailsDTO.PostalCode,
-                City = _userDetailsDTO.City
-            };
+                UserDetailsModel userDetails = new UserDetailsModel()
+                {
+                    UserName = _userDetailsDTO.UserName,
+                    Email = _userDetailsDTO.Email,
+                    RegistrationDate = _userDetailsDTO.RegistrationDate,
+                    FirstName = _userDetailsDTO.FirstName,
+                    LastName = _userDetailsDTO.LastName,
+                    Street = _userDetailsDTO.Street,
+                    PostalCode = _userDetailsDTO.PostalCode,
+                    City = _userDetailsDTO.City
+                };
 
-            _userRoleDTOs = new List<RoleDTO>(_userRoleService.GetUserRoles(_userDetailsDTO.Guid));
+                UserUpdateDetailsForm = userDetails;
 
-            UserUpdateDetailsForm = userDetails;
-        }
-        else
-        {
-            _errorLogger.Logger("UserDetailsViewModel.Constructor", "UserDetailsForm is null");
-            UserUpdateDetailsForm = null!;
-        }
 
-        //var avaliableRolesDTO = _roleService.GetAll();
+                var tempUserRoleDTOs = new List<RoleDTO>(await _userRoleService.GetUserRolesAsync(_userDetailsDTO.Guid));
+                _userRoleDTOs = tempUserRoleDTOs;
 
-        //ObservableCollection<RoleDTO> avaliableRoleList = new ObservableCollection<RoleDTO>(avaliableRolesDTO);
+            }
+            else
+            {
+                _errorLogger.Logger("UserDetailsViewModel.Constructor", "UserDetailsForm is null");
+                UserUpdateDetailsForm = null!;
+            }
 
-        _roleDTOs = _roleService.GetAll();
+            _roleDTOs = await _roleService.GetAllAsync();
 
-        UpdateRoleLists();
+            UpdateRoleLists();
+        });
     }
 
     /// <summary>
@@ -91,13 +94,13 @@ public partial class UserUpdateViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private UserDetailsModel userUpdateDetailsForm;
+    private UserDetailsModel userUpdateDetailsForm = null!;
 
     [ObservableProperty]
-    private ObservableCollection<RoleDTO> userRoles;
+    private ObservableCollection<RoleDTO> userRoles = null!;
 
     [ObservableProperty]
-    private ObservableCollection<RoleDTO> roles;
+    private ObservableCollection<RoleDTO> roles = null!;
 
     /// <summary>
     /// Adds clicked Role from Avaliable Roles to UserRoles
@@ -111,13 +114,6 @@ public partial class UserUpdateViewModel : ObservableObject
         _userRoleDTOs.Add(addedRoleDTO);
 
         UpdateRoleLists();
-
-        //if (_userRoleService.AddRoleToUser(_userDetailsDTO.Guid, id))
-        //{
-        //    UpdateRoleLists();
-        //}
-        //else
-        //    MessageBox.Show("Role could not be added to user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     /// <summary>
@@ -127,18 +123,9 @@ public partial class UserUpdateViewModel : ObservableObject
     [RelayCommand]
     public void RemoveRoleBtn(int id)
     {
-        //RoleDTO removedRoleDTO = _roleDTOs.FirstOrDefault(x => x.Id == id)!;
-
         _userRoleDTOs.RemoveAll(x => x.Id == id);
 
         UpdateRoleLists();
-
-        //if (_userRoleService.RemoveRoleFromUser(_userDetailsDTO.Guid, id))
-        //{
-        //    UpdateRoleLists();
-        //}
-        //else
-        //    MessageBox.Show("Role could not be removed from user!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 
     /// <summary>
@@ -147,7 +134,7 @@ public partial class UserUpdateViewModel : ObservableObject
     /// Navigates to UserDetailsView if successful, else fail Messagebox
     /// </summary>
     [RelayCommand]
-    public void UpdateUserBtn()
+    public async void UpdateUserBtn()
     {
         bool success = false;
 
@@ -164,9 +151,9 @@ public partial class UserUpdateViewModel : ObservableObject
             updatedUser.PostalCode = UserUpdateDetailsForm.PostalCode;
             updatedUser.City = UserUpdateDetailsForm.City;
 
-            success = _userService.UpdateUserDetails(updatedUser);
+            success = await _userService.UpdateUserDetailsAsync(updatedUser);
 
-            success = _userRoleService.UpdateUserRoles(_userRoleDTOs, _userDetailsDTO.Guid);
+            success = await _userRoleService.UpdateUserRolesAsync(_userRoleDTOs, _userDetailsDTO.Guid);
 
             if (success)
             {

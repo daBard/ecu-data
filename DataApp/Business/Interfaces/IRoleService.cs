@@ -5,9 +5,9 @@ namespace Business.Interfaces
 {
     public interface IRoleService
     {
-        bool Create(string roleName);
-        bool Delete(int id);
-        RoleEntity Exists(string roleName);
-        IEnumerable<RoleDTO> GetAll();
+        Task<bool> CreateAsync(string roleName);
+        Task<bool> DeleteAsync(int id);
+        Task<RoleEntity> ExistsAsync(string roleName);
+        Task<IEnumerable<RoleDTO>> GetAllAsync();
     }
 }

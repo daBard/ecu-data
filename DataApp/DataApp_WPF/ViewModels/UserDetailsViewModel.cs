@@ -30,43 +30,46 @@ public partial class UserDetailsViewModel : ObservableObject
 
         _userId = _userService.GetStoredUserId();
 
-        var userDetailsDTO = _userService.GetUserDetails(_userId);
-
-        if (userDetailsDTO != null )
+        Task.Run(async () =>
         {
-            UserDetailsModel userDetails = new UserDetailsModel()
+            var userDetailsDTO = await _userService.GetUserDetailsAsync(_userId);
+
+            if (userDetailsDTO != null)
             {
-                UserName = userDetailsDTO.UserName,
-                Email = userDetailsDTO.Email,
-                RegistrationDate = userDetailsDTO.RegistrationDate,
-                FirstName = userDetailsDTO.FirstName,
-                LastName = userDetailsDTO.LastName,
-                Street = userDetailsDTO.Street,
-                PostalCode = userDetailsDTO.PostalCode,
-                City = userDetailsDTO.City
-            };
+                UserDetailsModel userDetails = new UserDetailsModel()
+                {
+                    UserName = userDetailsDTO.UserName,
+                    Email = userDetailsDTO.Email,
+                    RegistrationDate = userDetailsDTO.RegistrationDate,
+                    FirstName = userDetailsDTO.FirstName,
+                    LastName = userDetailsDTO.LastName,
+                    Street = userDetailsDTO.Street,
+                    PostalCode = userDetailsDTO.PostalCode,
+                    City = userDetailsDTO.City
+                };
 
-            UserDetailsForm = userDetails;
-        }
-        else
-        {
-            _errorLogger.Logger("UserDetailsViewModel.Constructor", "UserDetailsForm is null");
-            UserDetailsForm = null!;
-        }
+                UserDetailsForm = userDetails;
+            }
+            else
+            {
+                _errorLogger.Logger("UserDetailsViewModel.Constructor", "UserDetailsForm is null");
+                UserDetailsForm = null!;
+            }
 
-        var userRolesDTOs = _userRoleService.GetUserRoles(_userId);
+            var userRolesDTOs = await _userRoleService.GetUserRolesAsync(_userId);
 
-        if (userRolesDTOs != null)
-        {
-            UserRoles = new ObservableCollection<RoleDTO>(userRolesDTOs);
-        }
+            if (userRolesDTOs != null)
+            {
+                UserRoles = new ObservableCollection<RoleDTO>(userRolesDTOs);
+            }
+        });
     }
 
     [ObservableProperty]
-    private UserDetailsModel userDetailsForm;
+    private UserDetailsModel userDetailsForm = null!;
 
     [ObservableProperty]
-    private ObservableCollection<RoleDTO> userRoles;
+    private ObservableCollection<RoleDTO> userRoles = null!;
 
     /// <summary>
     /// Navigates to UserUpdateView
@@ -95,16 +98,14 @@ public partial class UserDetailsViewModel : ObservableObject
     /// Navigates to UserListView if successful, else fail MessageBox
     /// </summary>
     [RelayCommand]
-    public void DeleteUserBtn()
+    public async void DeleteUserBtn()
     {
-        if (!_userService.DeleteUser())
-        {
-            MessageBox.Show("\"User could not be deleted. See log for more information.", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        else
+        if (await _userService.DeleteUserAsync())
         {
             var mainViewModel = _serviceProvider.GetRequiredService<MainViewModel>();
             mainViewModel.CurrentViewModel = _serviceProvider.GetRequiredService<UserListViewModel>();
         }
+        else
+            MessageBox.Show("\"User could not be deleted. See log for more information.", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 }

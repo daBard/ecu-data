@@ -62,7 +62,7 @@
             <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
             
             <MenuItem Header="Products">
-                <MenuItem Header="Add New Product"></MenuItem>
+                <MenuItem Header="Functionality missing"></MenuItem>
             </MenuItem>
 
             <MenuItem Header="Help" HorizontalAlignment="Right" Command="{Binding HelpCommand}" />

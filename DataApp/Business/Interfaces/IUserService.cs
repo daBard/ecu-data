@@ -4,13 +4,15 @@ namespace Business.Interfaces
 {
     public interface IUserService
     {
-        bool CreateUser(UserAddDTO newUser);
-        bool DeleteUser();
+        Task<bool> CreateUserAsync(UserAddDTO newUser);
+        Task<UserDetailsDTO> GetUserDetailsAsync(Guid userDetailsId);
+        Task<IEnumerable<UserListDTO>> GetUserListAsync();
+        Task<bool> UpdateUserDetailsAsync(UserDetailsDTO updatedUser);
+        Task<bool> DeleteUserAsync();
+
+        void StoreUserId(Guid id);
         UserDetailsDTO GetStoredUserDetailsDTO();
         Guid GetStoredUserId();
-        UserDetailsDTO GetUserDetails(Guid userDetailsId);
-        IEnumerable<UserListDTO> GetUserList();
-        void StoreUserId(Guid id);
-        bool UpdateUserDetails(UserDetailsDTO updatedUser);
+        
     }
 }

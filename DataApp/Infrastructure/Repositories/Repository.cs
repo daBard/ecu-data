@@ -1,5 +1,6 @@
 ﻿using Helper;
 using Infrastructure.Contexts;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.Marshalling;
@@ -20,12 +21,12 @@ public abstract class Repository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="entity">Flexible param based on topical entity</param>
     /// <returns>Created entity if successful, else null</returns>
-    public virtual TEntity Create(TEntity entity)
+    public virtual async Task<TEntity> CreateAsync(TEntity entity)
     {
         try
         {
-            _context.Set<TEntity>().Add(entity);
-            _context.SaveChanges();
+            await _context.Set<TEntity>().AddAsync(entity);
+            await _context.SaveChangesAsync();
             return entity;
         }
         catch(Exception ex) { LogError(ex.ToString()); }
@@ -36,22 +37,22 @@ public abstract class Repository<TEntity> where TEntity : class
     /// Get all rows from db table
     /// </summary>
     /// <returns>IEnumerable of topical entity if successful, else null</returns>
-    public virtual IEnumerable<TEntity> GetAll()
+    public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
     {
         try
         {
-            var result = _context.Set<TEntity>().ToList();
+            var result = await _context.Set<TEntity>().ToListAsync();
             return result;
         }
         catch (Exception ex) { LogError(ex.Message); }
         return null!;
     }
 
-    public virtual IEnumerable<TEntity> GetAllFromGuid(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<IEnumerable<TEntity>> GetAllFromGuidAsync(Expression<Func<TEntity, bool>> expression)
     {
         try
         {
-            var entities = _context.Set<TEntity>().Where(expression).ToList();
+            var entities = await _context.Set<TEntity>().Where(expression).ToListAsync();
             return entities;
         }
         catch(Exception ex) { LogError(ex.Message); }
@@ -63,11 +64,11 @@ public abstract class Repository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="expression">One unique param from topical entity</param>
     /// <returns>One topical entity if successful, else null</returns>
-    public virtual TEntity GetOne(Expression<Func<TEntity, bool>> expression) 
+    public virtual async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> expression) 
     {
         try
         {
-            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+            var entity = await _context.Set<TEntity>().FirstOrDefaultAsync(expression);
             return entity!;
         }
         catch (Exception ex) { LogError(ex.Message); }
@@ -79,13 +80,13 @@ public abstract class Repository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="entity">One entity of topical entity</param>
     /// <returns>Updated entity if successful, else null</returns>
-    public virtual TEntity Update(Expression<Func<TEntity, bool>> expression, TEntity entity)
+    public virtual async Task<TEntity> UpdateAsync(Expression<Func<TEntity, bool>> expression, TEntity entity)
     {
         try
         {
-            var entityToUpdate = _context.Set<TEntity>().FirstOrDefault(expression);
+            var entityToUpdate = await _context.Set<TEntity>().FirstOrDefaultAsync(expression);
             _context.Entry<TEntity>(entityToUpdate!).CurrentValues.SetValues(entity);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return entityToUpdate!;
         }
@@ -98,15 +99,15 @@ public abstract class Repository<TEntity> where TEntity : class
     /// </summary>
     /// <param name="expression"></param>
     /// <returns>True if entity is successfully removed, else false</returns>
-    public virtual bool Delete(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> expression)
     {
         try
         {
-            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+            var entity = await _context.Set<TEntity>().FirstOrDefaultAsync(expression);
             if (entity != null)
             {
                 _context.Set<TEntity>().Remove(entity);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             return true;
         }
@@ -114,11 +115,11 @@ public abstract class Repository<TEntity> where TEntity : class
         return false;
     }
 
-    public virtual TEntity Exists(Expression<Func<TEntity, bool>> expression)
+    public virtual async Task<TEntity> ExistsAsync(Expression<Func<TEntity, bool>> expression)
     {
         try
         {
-            var entity = _context.Set<TEntity>().FirstOrDefault(expression);
+            var entity = await _context.Set<TEntity>().FirstOrDefaultAsync(expression);
             if (entity != null)
                 return entity;
         }

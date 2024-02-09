@@ -27,6 +27,10 @@ public class UserEntity : IUserEntity
     public string Password { get; set; } = null!;
 
     [Required]
+    [Column(TypeName = "nvarchar(200)")]
+    public string SecurityKey { get; set; } = null!;
+
+    [Required]
     [ForeignKey(nameof(UserProfile))]
     public int UserProfileId { get; set; }
 

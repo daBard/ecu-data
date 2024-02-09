@@ -24,7 +24,7 @@ public class RoleService : IRoleService
     /// </summary>
     /// <param name="roleName">The role name as string</param>
     /// <returns>True if successful, else false</returns>
-    public bool Create(string roleName)
+    public async Task<bool> CreateAsync(string roleName)
     {
         try
         {
@@ -33,7 +33,7 @@ public class RoleService : IRoleService
                 RoleName = roleName
             };
 
-            var result = _roleRepo.Create(roleEntity);
+            var result = await _roleRepo.CreateAsync(roleEntity);
 
             if (result != null)
                 return true;
@@ -47,12 +47,12 @@ public class RoleService : IRoleService
     /// Gets a list of all roles
     /// </summary>
     /// <returns>An IEnumerable of type RoleDTO</returns>
-    public IEnumerable<RoleDTO> GetAll()
+    public async Task<IEnumerable<RoleDTO>> GetAllAsync()
     {
         List<RoleDTO> roleDTOs = new List<RoleDTO>();
         try
         {
-            var roleEntities = _roleRepo.GetAll();
+            var roleEntities = await _roleRepo.GetAllAsync();
 
             foreach (var entity in roleEntities)
             {
@@ -73,21 +73,21 @@ public class RoleService : IRoleService
     /// </summary>
     /// <param name="id">Role id as int</param>
     /// <returns>True if successful, else false</returns>
-    public bool Delete(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
         try
         {
-            var userRoles = _userRoleRepo.GetAll();
+            var userRoles = await _userRoleRepo.GetAllAsync();
 
             if (userRoles != null)
             {
                 foreach (var userRole in userRoles)
                 {
-                    _userRoleRepo.Delete(x => x.RoleId == id);
+                    await _userRoleRepo.DeleteAsync(x => x.RoleId == id);
                 }
             }
 
-            _roleRepo.Delete(x => x.Id == id);
+            await _roleRepo.DeleteAsync(x => x.Id == id);
             return true;
         }
         catch (Exception ex) { LogError(ex.Message); }
@@ -99,11 +99,11 @@ public class RoleService : IRoleService
     /// </summary>
     /// <param name="roleName">Role name as string</param>
     /// <returns>A RoleEntity if successful, else null</returns>
-    public RoleEntity Exists(string roleName)
+    public async Task<RoleEntity> ExistsAsync(string roleName)
     {
         try
         {
-            var result = _roleRepo.Exists(x => x.RoleName == roleName);
+            var result = await _roleRepo.ExistsAsync(x => x.RoleName == roleName);
             return result;
         }
         catch (Exception ex) { LogError(ex.Message); }

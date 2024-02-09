@@ -24,7 +24,7 @@ public partial class UserAddViewModel(IServiceProvider serviceProvider, UserServ
     /// Navigates to UserListView if successful, else fail Messagebox
     /// </summary>
     [RelayCommand]
-    public void AddUserBtn()
+    public async void AddUserBtn()
     {
         //!! This needs regex for Email, Password and ConformPassword
         if (!string.IsNullOrWhiteSpace(CreateUserForm.UserName) && 
@@ -36,21 +36,17 @@ public partial class UserAddViewModel(IServiceProvider serviceProvider, UserServ
         {
             if (CreateUserForm.Password == CreateUserForm.ConfirmPassword)
             {
-                byte[] encData_byte = new byte[CreateUserForm.Password.Length];
-                encData_byte = System.Text.Encoding.UTF8.GetBytes(CreateUserForm.Password);
-                string encodedData = Convert.ToBase64String(encData_byte);
-
                 UserAddDTO newUser = new UserAddDTO
                 {
                     UserName = CreateUserForm.UserName,
                     Email = CreateUserForm.Email,
-                    Password = encodedData,
+                    Password = CreateUserForm.Password,
                     ConfirmPassword = CreateUserForm.ConfirmPassword,
                     FirstName = CreateUserForm.FirstName,
                     LastName = CreateUserForm.LastName
                 };
 
-                if (!_userService.CreateUser(newUser))
+                if (!await _userService.CreateUserAsync(newUser))
                     MessageBox.Show("New user not created!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
 
                 NavigateToUserList();

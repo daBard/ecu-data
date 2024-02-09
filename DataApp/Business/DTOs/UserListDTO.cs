@@ -1,4 +1,5 @@
 ﻿using Business.Interfaces;
+using Infrastructure.Entities;
 
 namespace Business.DTOs;
 

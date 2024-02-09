@@ -84,6 +84,10 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("date");
 
+                    b.Property<string>("SecurityKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");

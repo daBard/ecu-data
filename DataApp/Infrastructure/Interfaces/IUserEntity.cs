@@ -9,6 +9,7 @@ namespace Infrastructure.Interfaces
         string Email { get; set; }
         Guid Guid { get; set; }
         string Password { get; set; }
+        string SecurityKey { get; set; }
         DateTime RegistrationDate { get; set; }
         ICollection<UserRoleEntity> Roles { get; set; }
         string UserName { get; set; }

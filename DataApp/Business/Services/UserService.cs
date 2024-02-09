@@ -3,6 +3,8 @@ using Business.Interfaces;
 using Helper;
 using Infrastructure.Entities;
 using Infrastructure.Repositories;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Business.Services;
 
@@ -29,15 +31,18 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="newUser">Takes an object of type UserAddDTO</param>
     /// <returns>True if successful, else false</returns>
-    public bool CreateUser(UserAddDTO newUser)
+    public async Task<bool> CreateUserAsync(UserAddDTO newUser)
     {
         try
         {
+            GenerateSecurePassword(newUser.Password, out string password, out string securityKey);
+
             UserEntity userEntity = new UserEntity();
 
             userEntity.Guid = newUser.Id;
             userEntity.UserName = newUser.UserName;
-            userEntity.Password = newUser.Password; //HASH PASSWORD
+            userEntity.Password = password;
+            userEntity.SecurityKey = securityKey;
             userEntity.Email = newUser.Email;
 
             userEntity.RegistrationDate = DateTime.Now;
@@ -52,7 +57,7 @@ public class UserService : IUserService
             userEntity.Address = addressEntity;
             userEntity.UserProfile = userProfileEntity;
 
-            if (_userRepo.Create(userEntity) != null)
+            if (await _userRepo.CreateAsync(userEntity) != null)
             {
                 return true;
             }
@@ -65,18 +70,20 @@ public class UserService : IUserService
     /// Gets all Users from Repo
     /// </summary>
     /// <returns>An IEnumerable of UserListDTOs</returns>
-    public IEnumerable<UserListDTO> GetUserList()
+    public async Task<IEnumerable<UserListDTO>> GetUserListAsync()
     {
         List<UserListDTO> listUserDTOs = new List<UserListDTO>();
 
-        var repoUsers = _userRepo.GetAll();
+        var repoUsers = await _userRepo.GetAllAsync();
 
         foreach (var repoUser in repoUsers)
         {
-            UserListDTO listUserDTO = new UserListDTO();
-            listUserDTO.Id = repoUser.Guid;
-            listUserDTO.UserName = repoUser.UserName;
-            listUserDTO.Email = repoUser.Email;
+            UserListDTO listUserDTO = new UserListDTO
+            {
+                Id = repoUser.Guid,
+                UserName = repoUser.UserName,
+                Email = repoUser.Email,
+            };
             listUserDTOs.Add(listUserDTO);
         }
 
@@ -88,15 +95,15 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="userDetailsId">User Guid</param>
     /// <returns>A UserDetails DTO if successful, else null</returns>
-    public UserDetailsDTO GetUserDetails(Guid userDetailsId)
+    public async Task<UserDetailsDTO> GetUserDetailsAsync(Guid userDetailsId)
     {
-        var userEntity = _userRepo.GetOne(x => (x.Guid == userDetailsId));
+        var userEntity = await _userRepo.GetOneAsync(x => (x.Guid == userDetailsId));
         if (userEntity != null)
         {
-            var userProfileEntity = _userProfileRepo.GetOne(x => x.Id == userEntity.UserProfileId);
-            var userAddressEntity = _addressRepo.GetOne(x => x.Id == userEntity.AddressId);
+            var userProfileEntity = await _userProfileRepo.GetOneAsync(x => x.Id == userEntity.UserProfileId);
+            var userAddressEntity = await _addressRepo.GetOneAsync(x => x.Id == userEntity.AddressId);
 
-            UserDetailsDTO userDetailsDTO = new UserDetailsDTO()
+            UserDetailsDTO userDetailsDTO = new UserDetailsDTO
             {
                 Guid = userEntity.Guid,
                 FirstName = userProfileEntity.FirstName,
@@ -119,11 +126,11 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="updatedUser">Object of type UserDetailsDTO</param>
     /// <returns>True if successful, else false</returns>
-    public bool UpdateUserDetails(UserDetailsDTO updatedUser)
+    public async Task<bool> UpdateUserDetailsAsync(UserDetailsDTO updatedUser)
     {
         try
         {
-            UserEntity updatedEntity = _userRepo.GetOne(x => x.Guid == _userId);
+            UserEntity updatedEntity = await _userRepo.GetOneAsync(x => x.Guid == _userId);
 
             updatedEntity.UserProfile.FirstName = updatedUser.FirstName!;
             updatedEntity.UserProfile.LastName = updatedUser.LastName!;
@@ -131,7 +138,7 @@ public class UserService : IUserService
             updatedEntity.Address.PostalCode = updatedUser.PostalCode;
             updatedEntity.Address.City = updatedUser.City;
 
-            var userEntity = _userRepo.Update(x => x.Guid == updatedEntity.Guid, updatedEntity);
+            var userEntity = await _userRepo.UpdateAsync(x => x.Guid == updatedEntity.Guid, updatedEntity);
 
             if (userEntity != null)
             {
@@ -146,14 +153,14 @@ public class UserService : IUserService
     /// Deletes User currently shown in UserDetailsView
     /// </summary>
     /// <returns>True if successful, else false</returns>
-    public bool DeleteUser()
+    public async Task<bool> DeleteUserAsync()
     {
         try
         {
-            UserEntity userEntity = _userRepo.GetOne(x => x.Guid == _userId);
-            var result = _addressRepo.Delete(x => x.Id == userEntity.AddressId);
-            result = _userProfileRepo.Delete(x => x.Id == userEntity.UserProfileId);
-            result = _userRepo.Delete(x => x.Guid == _userId);
+            UserEntity userEntity = await _userRepo.GetOneAsync(x => x.Guid == _userId);
+            var result = await _addressRepo.DeleteAsync(x => x.Id == userEntity.AddressId);
+            result = await _userProfileRepo.DeleteAsync(x => x.Id == userEntity.UserProfileId);
+            result = await _userRepo.DeleteAsync(x => x.Guid == _userId);
             return result;
         }
         catch (Exception ex) { LogError(ex.Message); }
@@ -171,6 +178,13 @@ public class UserService : IUserService
         else
             LogError("Stored UserDetailsDTO is null");
         return null!;
+    }
+
+    private void GenerateSecurePassword(string password, out string generatedPassword, out string securityKey)
+    {
+        using var hmac = new HMACSHA256();
+        securityKey = Convert.ToBase64String(hmac.Key);
+        generatedPassword = Convert.ToBase64String(hmac.ComputeHash(Encoding.UTF8.GetBytes(password)));
     }
 
     /// <summary>

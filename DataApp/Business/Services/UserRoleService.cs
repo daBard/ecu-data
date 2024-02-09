@@ -25,23 +25,23 @@ public class UserRoleService : IUserRoleService
     /// <param name="roleDTOs">IEnumerable of type RoleDTO</param>
     /// <param name="userGuid">User Guid</param>
     /// <returns>True if successful, else false</returns>
-    public bool UpdateUserRoles(IEnumerable<RoleDTO> roleDTOs, Guid userGuid)
+    public async Task<bool> UpdateUserRolesAsync(IEnumerable<RoleDTO> roleDTOs, Guid userGuid)
     {
         try
         {
-            var roles = _roleRepo.GetAll();
+            var roles = await _roleRepo.GetAllAsync();
 
             foreach (RoleEntity role in roles)
             {
                 if (roleDTOs.Any(x => x.Id == role.Id))
                 {
-                    if (_userRoleRepo.Exists(x => x.RoleId == role.Id && x.UserGuid == userGuid) == null)
-                        AddRoleToUser(userGuid, role.Id);
+                    if (await _userRoleRepo.ExistsAsync(x => x.RoleId == role.Id && x.UserGuid == userGuid) == null)
+                        await AddRoleToUserAsync(userGuid, role.Id);
                 }
                 else
                 {
-                    if (_userRoleRepo.Exists(x => x.RoleId == role.Id && x.UserGuid == userGuid) != null)
-                        RemoveRoleFromUser(userGuid, role.Id);
+                    if (await _userRoleRepo.ExistsAsync(x => x.RoleId == role.Id && x.UserGuid == userGuid) != null)
+                        await RemoveRoleFromUserAsync(userGuid, role.Id);
                 }
             }
             return true;
@@ -56,7 +56,7 @@ public class UserRoleService : IUserRoleService
     /// <param name="userGuid">User Guid</param>
     /// <param name="roleId">Role Id to be added</param>
     /// <returns>True if successful, else false</returns>
-    private bool AddRoleToUser(Guid userGuid, int roleId)
+    private async Task<bool> AddRoleToUserAsync(Guid userGuid, int roleId)
     {
         try
         {
@@ -65,7 +65,7 @@ public class UserRoleService : IUserRoleService
                 UserGuid = userGuid,
                 RoleId = roleId
             };
-            if (_userRoleRepo.Create(userRoleEntity) != null)
+            if (await _userRoleRepo.CreateAsync(userRoleEntity) != null)
             {
                 return true;
             }
@@ -79,12 +79,12 @@ public class UserRoleService : IUserRoleService
     /// </summary>
     /// <param name="guid">User Guid</param>
     /// <returns>True if successful, else false</returns>
-    public IEnumerable<RoleDTO> GetUserRoles(Guid guid)
+    public async Task<IEnumerable<RoleDTO>> GetUserRolesAsync(Guid guid)
     {
         try
         {
-            var roles = _roleRepo.GetAll();
-            var userRoleEntities = _userRoleRepo.GetAllFromGuid(x => x.UserGuid == guid);
+            var roles = await _roleRepo.GetAllAsync();
+            var userRoleEntities = await _userRoleRepo.GetAllFromGuidAsync(x => x.UserGuid == guid);
 
             List<RoleDTO> userRoles = new List<RoleDTO>();
             RoleEntity roleEntity = new RoleEntity();
@@ -114,12 +114,12 @@ public class UserRoleService : IUserRoleService
     /// <param name="userGuid">User Guid</param>
     /// <param name="roleId">Role Id to be removed</param>
     /// <returns></returns>
-    private bool RemoveRoleFromUser(Guid userGuid, int roleId)
+    private async Task<bool> RemoveRoleFromUserAsync(Guid userGuid, int roleId)
     {
         try
         {
 
-            var result = _userRoleRepo.Delete(x => x.UserGuid == userGuid && x.RoleId == roleId);
+            var result = await _userRoleRepo.DeleteAsync(x => x.UserGuid == userGuid && x.RoleId == roleId);
             return result;
         }
         catch (Exception ex) { LogError(ex.Message); }

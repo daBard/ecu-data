@@ -18,15 +18,15 @@ public partial class UserManageRolesViewModel : ObservableObject
         _serviceProvider = serviceProvider;
         _roleService = roleService;
 
-        UpdateRoleList();
+        UpdateRoleListAsync();
     }
 
     /// <summary>
     /// Gets all Roles as RoleDTOs and updates Role List in view
     /// </summary>
-    public void UpdateRoleList()
+    public async void UpdateRoleListAsync()
     {
-        var roleDTOs = _roleService.GetAll();
+        var roleDTOs = await _roleService.GetAllAsync();
 
         ObservableCollection<RoleDTO> tempRoles = new ObservableCollection<RoleDTO>(roleDTOs);
 
@@ -44,16 +44,14 @@ public partial class UserManageRolesViewModel : ObservableObject
     /// </summary>
     /// <param name="id"></param>
     [RelayCommand]
-    public void DeleteRoleBtn(int id)
+    public async void DeleteRoleBtn(int id)
     {
         if (MessageBox.Show("This action will remove the role from all users and delete the role.\n\nContinue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
         {
-           if (!_roleService.Delete(id))
-           {
-                MessageBox.Show("Role not deleted!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-           }
+           if (await _roleService.DeleteAsync(id))
+                UpdateRoleListAsync();
            else
-                UpdateRoleList();
+                MessageBox.Show("Role not deleted!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -63,19 +61,19 @@ public partial class UserManageRolesViewModel : ObservableObject
     /// Empties user input if successful, else fail Messagebox 
     /// </summary>
     [RelayCommand]
-    public void AddRoleBtn()
+    public async void AddRoleBtn()
     {
         if (!string.IsNullOrWhiteSpace(NewRoleName))
         {
-            if (!_roleService.Create(NewRoleName))
-                MessageBox.Show("Role not created!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
-            else
+            if (await _roleService.CreateAsync(NewRoleName))
             {
-                UpdateRoleList();
+                UpdateRoleListAsync();
                 NewRoleName = "";
             }
-                
-
+            else
+            {
+                MessageBox.Show("Role not created!", "Failure", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         else
             MessageBox.Show("Please enter fields correctly!", "Fields contains null or whitespace", MessageBoxButton.OK, MessageBoxImage.Error);
